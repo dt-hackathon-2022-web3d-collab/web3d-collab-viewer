@@ -1,20 +1,20 @@
-import { useState } from "react";
 import { useGetOrdered } from "./queries/owen-wilson/owen-wilson-query";
+import Participants from "./components/Participants";
+import Toolbar from "./components/Toolbar";
 
 function App() {
-  const [count, setCount] = useState(0);
   const { isLoading, data } = useGetOrdered(6);
 
   console.log(data);
 
   return (
-    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 ">
-      Hello
-      {!isLoading && (
-        <video width="480" height="360" controls>
-          <source src={data.video["360p"]} type="video/mp4" />
-        </video>
-      )}
+    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500">
+      <div className="w-3/4 mx-auto bg-yellow text-center">
+        <Participants />
+      </div>
+      <div className="absolute bottom-0 left-0">
+        <Toolbar />
+      </div>
     </div>
   );
 }
