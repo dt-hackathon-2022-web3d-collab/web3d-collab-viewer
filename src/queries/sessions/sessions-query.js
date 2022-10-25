@@ -7,4 +7,5 @@ const queryIds = {
   useGetSession: (sessionId) => [baseQueryId, "get", sessionId],
 };
 
-export const useCreateSession = () => useMutation((productId) => api.createSession({ productId }));
+export const useCreateSession = () =>
+  useMutation((productId) => api.createSession({ productId }));

@@ -5,7 +5,7 @@ import { useCreateSession } from "../queries/sessions/sessions-query.js";
 const CreateButton = () => {
   const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate();
-  const {data, mutate} = useCreateSession();
+  const { data, mutate } = useCreateSession();
 
   const handleClick = () => {
     mutate("product-id");
@@ -19,10 +19,14 @@ const CreateButton = () => {
   }, [data, navigate]);
 
   return (
-    <button onClick={handleClick} disabled={disabled}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <button
+      onClick={handleClick}
+      disabled={disabled}
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
       Create Room
-    </button>);
+    </button>
+  );
 };
 
 export default CreateButton;
