@@ -1,31 +1,14 @@
-const Participants = () => {
-  const particpants = [
-    {
-      name: "Casey Yee",
-    },
-    {
-      name: "Avery Garmaise",
-    },
-    {
-      name: "Jesse Liptak",
-    },
-    {
-      name: "Xiaozhong Chen",
-    },
-    {
-      name: "Tony Jreij",
-    },
-    {
-      name: "Aurélien Carrère",
-    },
-    {
-      name: "Yannick Simard",
-    },
-  ];
+import { useParams } from "react-router";
+import { useGetUsersInSession } from "../queries/users/users-query";
 
-  return particpants.map((particpant, index) => (
+const Participants = () => {
+  const { roomId } = useParams();
+  const { data } = useGetUsersInSession(roomId);
+  const participants = data?.rows ?? [];
+
+  return participants.map((participant, index) => (
     <div key={`participant-${index}`} className="inline-block bg-white p-3 m-1">
-      {particpant.name}
+      {participant.name}
     </div>
   ));
 };
