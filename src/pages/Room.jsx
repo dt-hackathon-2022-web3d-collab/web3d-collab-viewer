@@ -1,15 +1,12 @@
 import NameModal from "../components/NameModal.jsx";
 import Participants from "../components/Participants";
 import Toolbar from "../components/Toolbar";
-import { useGetOrdered } from "../queries/owen-wilson/owen-wilson-query";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 import { useParams } from "react-router-dom";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
 const Room = () => {
-  const { isLoading, data } = useGetOrdered(6);
-
   const { roomId } = useParams();
 
   const { joinUser } = useWebSocket({
