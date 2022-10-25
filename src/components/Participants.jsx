@@ -1,33 +1,25 @@
-const Participants = () => {
-  const particpants = [
-    {
-      name: "Casey Yee",
-    },
-    {
-      name: "Avery Garmaise",
-    },
-    {
-      name: "Jesse Liptak",
-    },
-    {
-      name: "Xiaozhong Chen",
-    },
-    {
-      name: "Tony Jreij",
-    },
-    {
-      name: "Aurélien Carrère",
-    },
-    {
-      name: "Yannick Simard",
-    },
-  ];
+import { useParams } from "react-router";
+import { colourClassArray } from "../constants/colours";
+import { useGetUsersInSession } from "../queries/users/users-query";
 
-  return particpants.map((particpant, index) => (
-    <div key={`participant-${index}`} className="inline-block bg-white p-3 m-1">
-      {particpant.name}
-    </div>
-  ));
+const Participants = () => {
+  const { roomId } = useParams();
+  const { data } = useGetUsersInSession(roomId);
+  const participants = data?.rows ?? [];
+
+  return participants.map((participant, index) => {
+    const colourIndex = index % colourClassArray.length;
+    const colour = colourClassArray[colourIndex];
+
+    return (
+      <div
+        key={`participant-${index}`}
+        className={`inline-block p-3 m-1 ${colour}`}
+      >
+        {participant.name}
+      </div>
+    );
+  });
 };
 
 export default Participants;

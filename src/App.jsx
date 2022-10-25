@@ -1,15 +1,15 @@
-import { Route, Routes } from "react-router-dom"
-
+import { Route, Routes } from "react-router-dom";
+import routes from "./constants/routes.js";
 import PageNotFound from "./pages/PageNotFound";
+import Product from "./pages/Product";
 import Room from "./pages/Room";
 
-function App() {
-  return (
-    <Routes>
-      <Route exact path="/rooms/:roomId" element={<Room />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-}
+const App = () => (
+  <Routes>
+    <Route exact path={routes.room} element={<Room />} />
+    <Route exact path={routes.product} element={<Product />} />
+    <Route path="*" element={<PageNotFound />} />
+  </Routes>
+);
 
 export default App;
