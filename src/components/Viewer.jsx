@@ -9,43 +9,18 @@ const Viewer = () => {
    useEffect(() => {
       setup();
     
-      window.addEventListener("message", (event) => {
-        if (window === event.source) {
-          return;
-        }
-        const {method, args} = event.data;
-        switch (method) {
-          case 'setViewPoint':
-            setViewPoint(args[0]);
-            break;
-          case 'setWatchFunction':
-            timeFunctionsByName[args[0]]();
-            break;
-          default: break;
-        }
-      }, false);
+      document.addEventListener("DOMContentLoaded", async () => {
+
+      
+      });
+    
    }, []);
 
     async function setup() {
-      try {
-        if (viewer && context && cartier_api) return;
-        viewer = document.querySelector("needle-engine");
-        if(!viewer) return;
-        context = await viewer?.getContext();
-        if(!context) return;
-
-        console.log({viewer, context})
-
-        cartier_api = viewer.GameObject.findObjectOfType("CartierViewer");
-        viewer.removeEventListener("product-selected", onProductChanged);
-        viewer.addEventListener("product-selected", onProductChanged);
-      }
-      catch (err) {
-        console.error(err);
-        setTimeout(() => {
-          setup();
-        }, 1000)
-      }
+      viewer = document.querySelector("needle-engine");
+      context = await viewer?.getContext();
+      cartier_api = viewer.GameObject.findObjectOfType("CartierViewer");
+      viewer.addEventListener("product-selected", onProductChanged);
     }
     
     // window.parent.postMessage(['formaFrameInitialized', '0.0.1'], "*");
