@@ -1,35 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import io from "socket.io-client";
 
-export const useWebSocket = ({ url, onOpen, onMessage, onClose, onError }) => {
+export const useWebSocket = ({ url }) => {
+  const socket = useRef(io(url));
+  const [isConnected, setIsConnected] = useState(socket.connected);
+
   useEffect(() => {
-    const websocket = new WebSocket(url);
-
-    if (onOpen) {
-      websocket.addEventListener("open", (event) => {
-        onOpen(event, websocket);
-      });
-    }
-
-    if (onMessage) {
-      websocket.addEventListener("message", (event) => {
-        onMessage(event, websocket);
-      });
-    }
-
-    if (onClose) {
-      websocket.addEventListener("close", (event) => {
-        onClose(event, websocket);
-      });
-    }
-
-    if (onError) {
-      websocket.addEventListener("error", (event) => {
-        onError(event, websocket);
-      });
-    }
+    socket.current.on("connect", () => {
+      setIsConnected(true);
+    });
 
     return () => {
-      websocket.close();
+      socket.current.off("connect");
+      socket.current.off("disconnect");
     };
-  }, [url, onOpen, onMessage, onClose, onError]);
+  }, [url]);
+
+  const joinUser = ({ name, roomId }) => {
+    socket.current.emit(
+      "join",
+      {
+        sessionId: roomId,
+        name,
+      },
+      (response) => {
+        console.log("==> joined", response);
+      }
+    );
+  };
+
+  return {
+    joinUser,
+  };
 };
