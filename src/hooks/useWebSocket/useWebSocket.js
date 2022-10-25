@@ -1,24 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 
 export const useWebSocket = ({ url }) => {
-  const socket = io(url);
-
+  const socket = useRef(io(url));
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
-    socket.on("connect", () => {
+    socket.current.on("connect", () => {
       setIsConnected(true);
     });
 
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
+      socket.current.off("connect");
+      socket.current.off("disconnect");
     };
   }, [url]);
 
   const joinUser = ({ name, roomId }) => {
-    socket.emit(
+    socket.current.emit(
       "join",
       {
         sessionId: roomId,
