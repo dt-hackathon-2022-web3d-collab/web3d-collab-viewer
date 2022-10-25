@@ -5,7 +5,6 @@ import { useGetOrdered } from "./queries/owen-wilson/owen-wilson-query";
 
 const App = () => {
   const { isLoading, data } = useGetOrdered(6);
-  console.log(data);
 
   return (
     <Routes>
