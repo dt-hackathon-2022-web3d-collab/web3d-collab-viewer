@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Viewer = () => {
-    let cartier_api, context, viewer;
+    const [{viewer, context}, setState] = useState({
+      context: null, viewer: null,
+    });
 
    useEffect(() => {
       setup();
@@ -14,10 +16,8 @@ const Viewer = () => {
    }, []);
 
     async function setup() {
-      viewer = document.querySelector("needle-engine");
-      context = await viewer?.getContext();
-      cartier_api = viewer.GameObject.findObjectOfType("CartierViewer");
-      viewer.addEventListener("product-selected", onProductChanged);
+      const viewerDom = document.querySelector("needle-engine");
+      setState({ viewer: viewerDom, context: await viewerDom?.getContext() });
     }
 
     return (
