@@ -1,7 +1,7 @@
-const url = import.meta.env.VITE_SOCKET_URL;
+const url = import.meta.env.VITE_REST_URL;
 
 export const createSession = async (body) => {
-  const response = await fetch(`http://${url}/v1/sessions`, {
+  const response = await fetch(`${url}/v1/sessions`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
