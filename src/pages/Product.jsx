@@ -1,4 +1,5 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { generatePath, useNavigate, useParams } from "react-router-dom";
+import routes from "../constants/routes.js";
 import {
   useCreateSession,
   useGetAllSessions,
@@ -19,7 +20,7 @@ const Product = () => {
       );
 
       if (sessionMatch?.id) {
-        navigate(`/rooms/${sessionMatch.id}`);
+        navigate(generatePath(routes.room, { roomId: sessionMatch.id }));
       } else {
         mutate(productId);
       }
@@ -28,7 +29,7 @@ const Product = () => {
 
   useEffect(() => {
     if (createData?.id) {
-      navigate(`/rooms/${createData.id}`);
+      navigate(generatePath(routes.room, { roomId: createData.id }));
     }
   }, [createData, navigate]);
 };
