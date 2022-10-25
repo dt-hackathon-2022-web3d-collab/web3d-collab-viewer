@@ -3,9 +3,9 @@ import Participants from "./components/Participants";
 import Toolbar from "./components/Toolbar";
 
 function App() {
-  const { isLoading, data } = useGetOrdered(6);
+  // const { isLoading, data } = useGetOrdered(6);
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500">
