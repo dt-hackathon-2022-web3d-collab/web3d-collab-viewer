@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <base href="/" />
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,92 +21,7 @@
       var parcelRequire;
     </script>
 
-    <!-- <div id="root">
-
-
-    </div> -->
+    <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-
-
-    <div id="content">
-      <needle-engine>
-        <div class="loading"></div>
-        <div id="overlay" class="overlay ar desktop">
-        </div>
-        <!--<div class="overlay ar desktop" id="forma-selection"></div>-->
-      </needle-engine>
-    </div>
   </body>
-
-  <script type="text/javascript">
-    let cartier_api, context, viewer;
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      setup();
-    });
-    document.addEventListener("load", async () => {
-      setup();
-    });
-    async function setup() {
-      try {
-        if (viewer && context && cartier_api) return;
-        viewer = document.querySelector("needle-engine");
-        if(!viewer) return;
-        context = await viewer?.getContext();
-        if(!context) return;
-        cartier_api = viewer.GameObject.findObjectOfType("CartierViewer");
-        viewer.removeEventListener("product-selected", onProductChanged);
-        viewer.addEventListener("product-selected", onProductChanged);
-      }
-      catch (err) {
-        console.error(err);
-        setTimeout(() => {
-          setup();
-        }, 1000)
-      }
-    }
-
-    const timeFunctionsByName = {
-      setRealtime, setFixedTime, setFastForward
-    };
-    window.addEventListener("message", (event) => {
-      if (window === event.source) {
-        return;
-      }
-      const {method, args} = event.data;
-      switch (method) {
-        case 'setViewPoint':
-          setViewPoint(args[0]);
-          break;
-        case 'setWatchFunction':
-          timeFunctionsByName[args[0]]();
-          break;
-        default: break;
-      }
-    }, false);
-    window.parent.postMessage(['formaFrameInitialized', '0.0.1'], "*");
-
-    function onProductChanged(evt) {
-    }
-
-    async function setRealtime() {
-      await setup();
-      cartier_api?.setRealtime?.call(cartier_api);
-    }
-
-    async function setFixedTime() {
-      await setup();
-      cartier_api?.setFixedTime?.call(cartier_api);
-    }
-
-    async function setFastForward() {
-      await setup();
-      cartier_api?.setFastForward?.call(cartier_api);
-    }
-
-    async function setViewPoint(id) {
-      await setup();
-      cartier_api?.setViewPoint?.call(cartier_api, id);
-    }
-  </script>
 </html>
