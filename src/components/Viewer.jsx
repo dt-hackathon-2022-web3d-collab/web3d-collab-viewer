@@ -30,10 +30,11 @@ const Viewer = () => {
       try {
         if (viewer && context && cartier_api) return;
         viewer = document.querySelector("needle-engine");
-        console.log({viewer, context: viewer.context})
         if(!viewer) return;
-        context = viewer.context;
+        context = await viewer?.getContext();
         if(!context) return;
+
+        console.log({viewer, context})
 
         cartier_api = viewer.GameObject.findObjectOfType("CartierViewer");
         viewer.removeEventListener("product-selected", onProductChanged);
