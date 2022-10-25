@@ -11,12 +11,12 @@ export const createSession = async (body) => {
 };
 
 export const getAllSessions = async () => {
-  const response = await fetch(`http://${url}/v1/sessions`, { method: "GET" });
+  const response = await fetch(`${url}/v1/sessions`, { method: "GET" });
   return response.json();
 };
 
 export const getSession = async ({ sessionId }) => {
-  const response = await fetch(`http://${url}/v1/sessions/${sessionId}`, {
+  const response = await fetch(`${url}/v1/sessions/${sessionId}`, {
     method: "GET",
   });
   return response.json();
