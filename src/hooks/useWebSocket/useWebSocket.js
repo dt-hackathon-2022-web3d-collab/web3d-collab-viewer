@@ -9,7 +9,6 @@ export const useWebSocket = ({ url }) => {
   useEffect(() => {
     socket.on("connect", () => {
       setIsConnected(true);
-      console.log("==> connected");
     });
 
     return () => {
@@ -18,18 +17,20 @@ export const useWebSocket = ({ url }) => {
     };
   }, [url]);
 
-  useEffect(() => {
-    if (isConnected) {
-      socket.emit(
-        "join",
-        {
-          sessionId: "5f53c5d8-91dd-4216-a56e-c0bda467582a",
-          name: "casey",
-        },
-        (response) => {
-          console.log("==> joined", response);
-        }
-      );
-    }
-  }, [isConnected]);
+  const joinUser = ({ name, roomId }) => {
+    socket.emit(
+      "join",
+      {
+        sessionId: roomId,
+        name,
+      },
+      (response) => {
+        console.log("==> joined", response);
+      }
+    );
+  };
+
+  return {
+    joinUser,
+  };
 };

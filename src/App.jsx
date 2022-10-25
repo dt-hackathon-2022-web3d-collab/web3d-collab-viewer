@@ -3,8 +3,6 @@ import PageNotFound from "./pages/PageNotFound";
 import Room from "./pages/Room";
 import { useGetOrdered } from "./queries/owen-wilson/owen-wilson-query";
 
-const url = import.meta.env.VITE_SOCKET_URL;
-
 const App = () => {
   const { isLoading, data } = useGetOrdered(6);
   console.log(data);
