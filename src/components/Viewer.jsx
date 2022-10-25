@@ -18,8 +18,6 @@ const Viewer = () => {
         console.log({viewer, context})
 
         cartier_api = viewer.GameObject.findObjectOfType("CartierViewer");
-        viewer.removeEventListener("product-selected", onProductChanged);
-        viewer.addEventListener("product-selected", onProductChanged);
       }
       catch (err) {
         console.error(err);
