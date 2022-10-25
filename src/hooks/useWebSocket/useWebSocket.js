@@ -16,18 +16,17 @@ export const useWebSocket = ({ url }) => {
     };
   }, [url]);
 
-  const joinUser = ({ name, roomId }) => {
-    socket.current.emit(
-      "join",
-      {
-        sessionId: roomId,
-        name,
-      },
-      (response) => {
-        console.log("==> joined", response);
-      }
-    );
-  };
+  const joinUser = ({ name, roomId }) =>
+    new Promise((resolve) => {
+      socket.current.emit(
+        "join",
+        {
+          sessionId: roomId,
+          name,
+        },
+        resolve
+      );
+    });
 
   return {
     joinUser,
