@@ -31,7 +31,7 @@ const Room = () => {
       <div className="w-3/4 mx-auto bg-yellow text-center">
         <Participants />
       </div>
-      <div className="absolute left-0 top-1/4">
+      <div className="absolute left-0 top-1/4 z-[2]">
         <Annotations />
       </div>
       <div className="absolute bottom-2 left-2">
