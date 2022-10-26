@@ -15,8 +15,9 @@ import {
 import { useCreateReply } from "../../queries/replies/replies-query";
 import { AnnotationItem } from "./AnnotationItem";
 import { AnnotationTextInput } from "./AnnotationTextInput";
+import { ReplyItem } from "./ReplyItem";
 
-const Annotations = ({ userId }) => {
+const Annotations = ({ userId, participants }) => {
   const { roomId: sessionId } = useParams();
   const [selected, setSelected] = useState(null);
   const queryClient = useQueryClient();
@@ -107,9 +108,20 @@ const Annotations = ({ userId }) => {
       </div>
       <AnnotationItem {...selected} />
       <div className="ml-2">
-        {selected?.replies.map((reply, index) => (
-          <AnnotationItem key={`annotation-reply-${index}`} {...reply} />
-        ))}
+        {selected?.replies.map((reply, index) => {
+          console.log(participants[0], reply);
+          const user = participants.find(
+            (participant) => participant.id === reply.userId
+          );
+
+          return (
+            <ReplyItem
+              key={`annotation-reply-${index}`}
+              userName={user?.name}
+              {...reply}
+            />
+          );
+        })}
       </div>
       <AnnotationTextInput label="Reply" onSubmit={handleReply} />
     </>
