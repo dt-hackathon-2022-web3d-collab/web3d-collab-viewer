@@ -5,8 +5,6 @@ import Participants from "../components/Participants";
 import ShareRoom from "../components/ShareRoom";
 import Toolbar from "../components/Toolbar";
 import Viewer from "../components/Viewer.jsx";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
 import Annotations from "../components/Annotations/Annotations.jsx";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 import { useGetUsersInSession } from "../queries/users/users-query";
@@ -41,9 +39,6 @@ const Room = () => {
       <NameModal onSubmit={onSubmitName} />
       <div className="w-3/4 mx-auto bg-yellow text-center">
         <Participants participants={participants} />
-      </div>
-      <div className="absolute right-2 top-1/4 bottom-1/4 z-[2] overflow-hidden">
-        <Annotations userId={user?.id} />
       </div>
       <div className="absolute right-2 top-1/4 bottom-1/4 z-[2] overflow-hidden">
         <Annotations userId={user?.id} />

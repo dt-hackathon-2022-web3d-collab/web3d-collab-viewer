@@ -7,7 +7,7 @@ const Participants = ({ participants }) => {
     const colour = colourClassArray[colourIndex];
     const thumbImage = avatarArray[colourIndex];
     return (
-      <div className="inline-block">
+      <div key={`participant-${index}`} className="inline-block">
         <div
           key={`participant-${index}`}
           className={`p-2 m-1 ${colour} rounded-full`}
