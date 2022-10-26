@@ -9,7 +9,8 @@ const Participants = ({ participants }) => {
   const [following, setFollowing] = useState(null);
 
   useEffect(() => {
-    console.log("following", following);
+    const participant = participants[following];
+    console.log("following", participant);
   }, [following]);
 
   return participants.map((participant, index) => {
