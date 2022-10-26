@@ -1,5 +1,6 @@
 import { createContext, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import NameModal from "../components/NameModal.jsx";
 import Participants from "../components/Participants";
 import ShareRoom from "../components/ShareRoom";
@@ -8,7 +9,11 @@ import Viewer from "../components/Viewer.jsx";
 import Annotations from "../components/Annotations/Annotations.jsx";
 import VariantList from "../components/Variants/VariantList.jsx";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
-import { useGetUsersInSession } from "../queries/users/users-query";
+import {
+  queryIds as usersQueryIds,
+  useGetUsersInSession,
+} from "../queries/users/users-query";
+import { queryIds as annotationsQueryIds } from "../queries/annotations/annotations-query.js";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
@@ -18,25 +23,32 @@ const Room = () => {
   const { roomId } = useParams();
   const [user, setUser] = useState("user");
 
-  const { data, refetch } = useGetUsersInSession(roomId);
+  const queryClient = useQueryClient();
+  const { data } = useGetUsersInSession(roomId);
 
   const participants = data?.rows ?? [];
 
   const onParticipantsUpdate = () => {
-    refetch();
+    queryClient.invalidateQueries(usersQueryIds.useGetUsersInSession(roomId));
+  };
+
+  const onAnnotationsUpdate = () => {
+    queryClient.invalidateQueries(
+      annotationsQueryIds.useGetAllAnnotations(roomId)
+    );
   };
 
   const { joinUser } = useWebSocket({
     url,
     onParticipantsUpdate,
+    onAnnotationsUpdate,
   });
 
   const onSubmitName = async (name) => {
     const user = await joinUser({ name, roomId });
 
     setUser(user);
-
-    refetch();
+    queryClient.invalidateQueries(usersQueryIds.useGetUsersInSession(roomId));
   };
 
   const [mode, setMode] = useState("view");

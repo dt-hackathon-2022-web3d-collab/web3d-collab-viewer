@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUsersInSession } from "./users-api";
 
 const baseQueryId = "users";
-const queryIds = {
+export const queryIds = {
   useGetUsersInSession: (sessionId) => [baseQueryId, sessionId],
 };
 

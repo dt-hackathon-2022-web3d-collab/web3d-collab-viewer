@@ -6,7 +6,7 @@ const url = import.meta.env.VITE_SOCKET_URL;
 
 const socket = io(url);
 
-export const useWebSocket = ({ onParticipantsUpdate }) => {
+export const useWebSocket = ({ onParticipantsUpdate, onAnnotationsUpdate }) => {
   const [isConnected, setIsConnected] = useState();
 
   const [user, setUser] = usePersistentContext("user");
@@ -32,6 +32,12 @@ export const useWebSocket = ({ onParticipantsUpdate }) => {
     socket.on("users", () => {
       if (onParticipantsUpdate) {
         onParticipantsUpdate();
+      }
+    });
+
+    socket.on("annotations", () => {
+      if (onAnnotationsUpdate) {
+        onAnnotationsUpdate();
       }
     });
 
