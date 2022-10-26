@@ -7,10 +7,12 @@ const url = import.meta.env.VITE_SOCKET_URL;
 
 const socket = io(url);
 
-export const useWebSocket = ({ onParticipantsUpdate }) => {
+export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate }) => {
   const [isConnected, setIsConnected] = useState();
   
   useEffect(() => {
+    if(isConnected) return;
+    
     socket.on('connect', () => {
       setIsConnected(true);
     });
@@ -28,6 +30,11 @@ export const useWebSocket = ({ onParticipantsUpdate }) => {
         onParticipantsUpdate();
       }
     });
+
+    socket.on("camera-transform", (transform) => {
+      console.log(transform)
+      if(onCameraUpdate) onCameraUpdate(transform);
+    })
 
     return () => {
       socket.off('connect');
@@ -51,8 +58,13 @@ export const useWebSocket = ({ onParticipantsUpdate }) => {
         resolve
       );
     });
+  
+    const updateCamera = (transform) => {
+      socket.emit("camera-transform", transform);
+    }
 
   return {
     joinUser,
+    updateCamera,
   };
 };
