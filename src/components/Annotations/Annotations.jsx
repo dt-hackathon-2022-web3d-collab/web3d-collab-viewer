@@ -1,16 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  ArrowLeft,
-  CheckCircle,
-  PaperPlaneRight,
-  XCircle,
-} from "phosphor-react";
+import { ArrowLeft, CheckCircle, XCircle } from "phosphor-react";
 import { useState } from "react";
 import { useParams } from "react-router";
 import {
   queryIds as annotationQueryIds,
   useCreateAnnotation,
   useGetAllAnnotations,
+  useResolveAnnotation,
+  useUnresolveAnnotation,
 } from "../../queries/annotations/annotations-query";
 import { useCreateReply } from "../../queries/replies/replies-query";
 import { AnnotationItem } from "./AnnotationItem";
@@ -25,6 +22,8 @@ const Annotations = ({ userId, participants }) => {
   const annotations = annotationsQuery.data?.rows ?? [];
   const createAnnotation = useCreateAnnotation();
   const createReply = useCreateReply();
+  const resolveAnnotation = useResolveAnnotation();
+  const unresolveAnnotation = useUnresolveAnnotation();
   const selected = annotations?.find(
     (annotation) => annotation.id === selectedId
   );
@@ -84,6 +83,19 @@ const Annotations = ({ userId, participants }) => {
     input.value = "";
   };
 
+  const handleToggleResolved = async () => {
+    const params = { sessionId, annotationId: selected.id };
+    if (selected.resolved) {
+      await unresolveAnnotation.mutateAsync(params);
+    } else {
+      await resolveAnnotation.mutateAsync(params);
+    }
+
+    queryClient.invalidateQueries(
+      annotationQueryIds.useGetAllAnnotations(sessionId)
+    );
+  };
+
   const annotationsView = (
     <>
       <h4>Annotations</h4>
@@ -105,7 +117,7 @@ const Annotations = ({ userId, participants }) => {
           <ArrowLeft />
         </div>
         <h4>Annotation Replies</h4>
-        <div className="p-2">
+        <div className="p-2" onClick={handleToggleResolved}>
           {selected?.resolved ? <XCircle /> : <CheckCircle />}
         </div>
       </div>
