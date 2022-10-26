@@ -23,7 +23,7 @@ const VariantList = () => {
         <div key={name}>
           <h4>{name}</h4>
           {options.map(({ label, id, select }) => (
-            <VariantItem key={id} title={label} onClick={select} />
+            <VariantItem key={id} label={label} onClick={select} />
           ))}
         </div>
       ))}
