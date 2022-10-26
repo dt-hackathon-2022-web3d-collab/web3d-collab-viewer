@@ -23,7 +23,7 @@ export const useWebSocket = ({ onParticipantsUpdate }) => {
       setLastPong(new Date().toISOString());
     });
 
-    socket.current.on("users", () => {
+    socket.on("users", () => {
       if (onParticipantsUpdate) {
         onParticipantsUpdate();
       }
@@ -42,7 +42,7 @@ export const useWebSocket = ({ onParticipantsUpdate }) => {
 
   const joinUser = ({ name, roomId }) =>
     new Promise((resolve) => {
-      socket.current.emit(
+      socket.emit(
         "join",
         {
           sessionId: roomId,
