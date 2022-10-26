@@ -6,6 +6,7 @@ import ShareRoom from "../components/ShareRoom";
 import Toolbar from "../components/Toolbar";
 import Viewer from "../components/Viewer.jsx";
 import Annotations from "../components/Annotations/Annotations.jsx";
+import VariantList from "../components/Variants/VariantList.jsx";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 import { useGetUsersInSession } from "../queries/users/users-query";
 
@@ -58,6 +59,9 @@ const Room = () => {
         </div>
         <div className="absolute right-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
           <Annotations userId={user?.id} participants={participants} />
+        </div>
+        <div className="absolute left-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
+          <VariantList />
         </div>
         <div className="absolute bottom-2 left-2 z-10">
           <Toolbar onModeChanged={onModeChanged} />
