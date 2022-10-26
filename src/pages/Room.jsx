@@ -18,16 +18,11 @@ export const Context = createContext({ mode: "view" });
 
 const Room = () => {
   const { roomId } = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
   const [didJoin, setDidJoin] = useState(false);
   const [cameraTransform, setCameraTransform] = useState({});
-  const [testInterval, setTestInterval] = useState();
-
-
-
-  // useEffect(() => {
-  //   console.log(cameraTransform.rotation.y);
-  // }, [cameraTransform])
+  const [selectedVariant, setSelectedVariant] = useState();
+  const isFollowing = user?.name == "follow";
 
   const { data, refetch } = useGetUsersInSession(roomId);
 
@@ -38,14 +33,20 @@ const Room = () => {
   };
 
   const onCameraUpdate = (cameraUpdate) => {
-    console.log(cameraUpdate);
+ 
     setCameraTransform(cameraUpdate.transform);
   }
 
-  const { joinUser, updateCamera } = useWebSocket({
+
+  const onVariantUpdate = ({variant}) => {
+    setSelectedVariant(variant)
+  }
+
+const { joinUser, updateCamera, updateVariant } = useWebSocket({
     url,
     onParticipantsUpdate,
     onCameraUpdate,
+    onVariantUpdate,
   });
 
   const onSubmitName = async (name) => {
@@ -57,6 +58,11 @@ const Room = () => {
   const onOrbitChanged = (transform) => {
     updateCamera(transform)
   }
+
+  const onVariantChanged = (variant) => {
+    updateVariant(variant);
+  }
+
   const [mode, setMode] = useState("view");
 
   const onModeChanged = useCallback(
@@ -72,7 +78,7 @@ const Room = () => {
       <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
         <NameModal onSubmit={onSubmitName} />
         <div className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0">
-          <Viewer onOrbitChanged={onOrbitChanged} cameraTransform={cameraTransform} isFollowing={user?.id != "5f9d41c2-9451-4263-af84-a980591d15b1"} />
+          <Viewer onOrbitChanged={onOrbitChanged} cameraTransform={cameraTransform} isFollowing={isFollowing} />
         </div>
         <div className="w-full text-center absolute top-0 left-0">
           <Participants participants={participants} />
@@ -81,7 +87,7 @@ const Room = () => {
           <Annotations userId={user?.id} participants={participants} />
         </div>
         <div className="absolute left-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
-          <VariantList />
+          <VariantList onChange={onVariantChanged} selectedVariant={selectedVariant} isFollowing={isFollowing} />
         </div>
         <div className="absolute bottom-2 left-2 z-10">
           <Toolbar onModeChanged={onModeChanged} />
