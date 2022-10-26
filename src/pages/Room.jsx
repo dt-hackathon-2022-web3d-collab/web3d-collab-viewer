@@ -9,7 +9,6 @@ import Annotations from "../components/Annotations/Annotations.jsx";
 import VariantList from "../components/Variants/VariantList.jsx";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 import { useGetUsersInSession } from "../queries/users/users-query";
-import { usePersistentContext } from "../hooks/usePersistentContext/usePersistentContext.js";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
@@ -17,7 +16,7 @@ export const Context = createContext({ mode: "view" });
 
 const Room = () => {
   const { roomId } = useParams();
-  const [user, setUser] = usePersistentContext("user");
+  const [user, setUser] = useState("user");
 
   const { data, refetch } = useGetUsersInSession(roomId);
 
@@ -51,7 +50,7 @@ const Room = () => {
   );
 
   return (
-    <Context.Provider value={{ mode }}>
+    <Context.Provider value={{ mode, user }}>
       <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
         <NameModal onSubmit={onSubmitName} />
         <div className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0">

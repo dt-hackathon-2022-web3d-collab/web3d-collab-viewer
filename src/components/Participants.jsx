@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { colourClassArray } from "../constants/colours";
 import { avatarArray } from "../constants/avatars";
-import { usePersistentContext } from "../hooks/usePersistentContext/usePersistentContext";
 import { useEffect } from "react";
+import { Context } from "../pages/Room";
 
 const Participants = ({ participants }) => {
-  const [user] = usePersistentContext("user");
+  const { user } = useContext(Context);
   const [following, setFollowing] = useState(null);
 
   useEffect(() => {
