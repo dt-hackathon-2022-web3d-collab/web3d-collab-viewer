@@ -3,7 +3,6 @@ const url = import.meta.env.VITE_REST_URL;
 export const createSession = async (body) => {
   const response = await fetch(`${url}/v1/sessions`, {
     method: "POST",
-    mode: "no-cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
