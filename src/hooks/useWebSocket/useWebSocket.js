@@ -18,6 +18,7 @@ export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate }) => {
     });
 
     socket.on('disconnect', () => {
+      console.log('disconnected')
       setIsConnected(false);
     });
 
@@ -31,9 +32,11 @@ export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate }) => {
       }
     });
 
-    socket.on("camera-transform", (transform) => {
-      console.log(transform)
-      if(onCameraUpdate) onCameraUpdate(transform);
+    socket.on("camera-updated", (transform) => {
+      console.log('socket', transform);
+      if(onCameraUpdate) {
+        onCameraUpdate(transform);
+      };
     })
 
     return () => {

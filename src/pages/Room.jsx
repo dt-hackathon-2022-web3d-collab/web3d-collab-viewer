@@ -16,31 +16,10 @@ const Room = () => {
   const { roomId } = useParams();
   const [user, setUser] = useState(null);
   const [didJoin, setDidJoin] = useState(false);
-  const [cameraTransform, setCameraTransform] = useState({
-    position: {x: 0, y: 0, z: 0},
-    rotation: {x: 0, y: 0, z: 0},
-  });
+  const [cameraTransform, setCameraTransform] = useState({});
   const [testInterval, setTestInterval] = useState();
 
-  useEffect(() => {
-    // Faking messages from socket
-    if(!testInterval){
-      const inter = setInterval(() => {
-        setCameraTransform(prevTransform => ({
-          position: {x: prevTransform + 1, y: 0, z: 0}
-        }));
-      }, 15);
 
-
-      setTestInterval(inter);
-    }
-
-    return () => {
-      if(testInterval) {
-        clearInterval(testInterval);
-      }
-    }
-  }, [])
 
   // useEffect(() => {
   //   console.log(cameraTransform.rotation.y);
@@ -54,8 +33,9 @@ const Room = () => {
     refetch();
   };
 
-  const onCameraUpdate = (transform) => {
-    console.log(transform);
+  const onCameraUpdate = (cameraUpdate) => {
+    console.log(cameraUpdate);
+    setCameraTransform(cameraUpdate.transform);
   }
 
   const { joinUser, updateCamera } = useWebSocket({
@@ -87,7 +67,7 @@ const Room = () => {
         <Toolbar />
       </div>
       <div className="h-3/4 w-full flex justify-center items-center">
-        {!!user && <Viewer onOrbitChanged={onOrbitChanged}/>}
+        {!!user && <Viewer onOrbitChanged={onOrbitChanged} cameraTransform={cameraTransform} isFollowing={user.id != "5f9d41c2-9451-4263-af84-a980591d15b1"} />}
       </div>
       <div className="absolute bottom-2 right-2">
         <ShareRoom />

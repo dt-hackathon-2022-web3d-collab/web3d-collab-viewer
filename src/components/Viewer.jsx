@@ -13,13 +13,31 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged}) => {
 
    const toggleOrbitControls = (isEnabled) => {
     const orbitControls =  context.mainCameraComponent.gameObject.getComponent('OrbitControls');
-    orbitControls.enabled = isEnabled;
+    // orbitControls.enabled = isEnabled;
    } 
 
    const updateCameraTransform = () => {
-    console.log(context.mainCameraComponent.gameObject)
-    context.mainCameraComponent.gameObject.translateX(20 * context.time.deltaTime);
-    context.mainCameraComponent.gameObject.lookAt(new context.THREE.Vector3(0, -0.1, 0));
+    if(cameraTransform){
+      const orbitControls =  context.mainCameraComponent.gameObject.getComponent('OrbitControls');
+       
+      context.mainCameraComponent._cam.position.copy(cameraTransform.position);
+      context.mainCameraComponent._cam.rotation.copy(cameraTransform.rotation);
+      // context.mainCameraComponent.gameObject.translateX(cameraTransform.position.x  * context.time.deltaTime);
+      // context.mainCameraComponent.gameObject.translateY(cameraTransform.position.y  * context.time.deltaTime);
+      // context.mainCameraComponent.gameObject.translateZ(cameraTransform.position.z  * context.time.deltaTime);
+    
+      // context.mainCameraComponent.gameObject.lookAt(cameraTransform.target);
+      // orbitControls.setCameraTargeT(cameraTransform.position);
+      
+      
+      // orbitControls.setCameraTarget(cameraTransform.target);
+      
+      // context.mainCameraComponent.gameObject.eulerAngles = cameraTransform.rotation;
+    // console.log(context.mainCameraComponent.gameObject.translateX);
+    
+    // context.mainCameraComponent.gameObject.translate(cameraTransform.position - context.mainCameraComponent.gameObject.position);
+    // context.mainCameraComponent.gameObject.rotate(cameraTransform.rotation - context.mainCameraComponent.gameObject.rotation)
+    }
    }
 
    useEffect(() => {
@@ -41,15 +59,18 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged}) => {
 
     function setupCamera () {
       const orbitControls =  context.mainCameraComponent.gameObject.getComponent('OrbitControls');
-      orbitControls.enablePan = false;
+      console.log(orbitControls);
       orbitControls.doubleClickToFocus = false;
       orbitControls.middleClickToFocus = false;
+
+      console.log(orbitControls);
+      console.log(context.mainCameraComponent)
 
       orbitControls.controls.addEventListener('change', (change) => {
         if(onOrbitChanged)
         onOrbitChanged({
-          position: context.mainCameraComponent.gameObject.position, 
-          rotation: context.mainCameraComponent.gameObject.rotation,
+          position: context.mainCameraComponent._cam.position, 
+          rotation: context.mainCameraComponent._cam.rotation,
         });
       });
     }
