@@ -1,5 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createAnnotation, getAllAnnotations } from "./annotations-api";
+import {
+  createAnnotation,
+  getAllAnnotations,
+  resolveAnnotation,
+  unresolveAnnotation,
+} from "./annotations-api";
 
 const baseQueryId = "annotations";
 export const queryIds = {
@@ -22,3 +27,7 @@ export const useGetAnnotation = (sessionId, annotationId) =>
   );
 
 export const useCreateAnnotation = () => useMutation(createAnnotation);
+
+export const useResolveAnnotation = () => useMutation(resolveAnnotation);
+
+export const useUnresolveAnnotation = () => useMutation(unresolveAnnotation);
