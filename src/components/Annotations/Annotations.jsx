@@ -19,19 +19,22 @@ import { ReplyItem } from "./ReplyItem";
 
 const Annotations = ({ userId, participants }) => {
   const { roomId: sessionId } = useParams();
-  const [selected, setSelected] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const queryClient = useQueryClient();
   const annotationsQuery = useGetAllAnnotations(sessionId);
   const annotations = annotationsQuery.data?.rows ?? [];
   const createAnnotation = useCreateAnnotation();
   const createReply = useCreateReply();
+  const selected = annotations?.find(
+    (annotation) => annotation.id === selectedId
+  );
 
   const handleSelect = (_event, annotation) => {
-    setSelected(annotation);
+    setSelectedId(annotation.id);
   };
 
   const handleDeselect = () => {
-    setSelected(null);
+    setSelectedId(null);
   };
 
   const handleAnnotation = async (event) => {
@@ -109,7 +112,6 @@ const Annotations = ({ userId, participants }) => {
       <AnnotationItem {...selected} />
       <div className="ml-2">
         {selected?.replies.map((reply, index) => {
-          console.log(participants[0], reply);
           const user = participants.find(
             (participant) => participant.id === reply.userId
           );
