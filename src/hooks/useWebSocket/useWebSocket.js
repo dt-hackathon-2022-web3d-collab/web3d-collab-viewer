@@ -1,30 +1,48 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import io from "socket.io-client";
 
-export const useWebSocket = ({ url, onParticipantsUpdate }) => {
-  const socket = useRef(io(url));
-  const [isConnected, setIsConnected] = useState(socket.connected);
+const url = import.meta.env.VITE_SOCKET_URL;
 
+
+const socket = io(url);
+
+export const useWebSocket = ({ onParticipantsUpdate }) => {
+  const [isConnected, setIsConnected] = useState();
+  
   useEffect(() => {
-    socket.current.on("connect", () => {
+    socket.on('connect', () => {
       setIsConnected(true);
     });
 
-    socket.current.on("users", () => {
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+    });
+
+    socket.on('pong', () => {
+      setLastPong(new Date().toISOString());
+    });
+
+    socket.on("users", () => {
       if (onParticipantsUpdate) {
         onParticipantsUpdate();
       }
     });
 
     return () => {
-      socket.current.off("connect");
-      socket.current.off("disconnect");
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('pong');
     };
-  }, [url]);
+  }, []);
+
+  const sendPing = () => {
+    socket.emit('ping');
+  }
 
   const joinUser = ({ name, roomId }) =>
     new Promise((resolve) => {
-      socket.current.emit(
+      socket.emit(
         "join",
         {
           sessionId: roomId,
