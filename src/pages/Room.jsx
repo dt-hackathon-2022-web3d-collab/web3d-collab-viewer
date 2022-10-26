@@ -41,7 +41,7 @@ const Room = () => {
         <Participants participants={participants} />
       </div>
       <div className="absolute right-2 top-1/4 bottom-1/4 z-[2] overflow-hidden">
-        <Annotations userId={user?.id} />
+        <Annotations userId={user?.id} participants={participants} />
       </div>
       <div className="absolute bottom-2 left-2">
         <Toolbar />
