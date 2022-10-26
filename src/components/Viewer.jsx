@@ -42,8 +42,6 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged}) => {
 
     function setupCamera () {
       const orbitControls =  context.mainCameraComponent.gameObject.getComponent('OrbitControls');
-      console.log(orbitControls);
-      orbitControls.doubleClickToFocus = false;
       orbitControls.middleClickToFocus = false;
 
       console.log(orbitControls);

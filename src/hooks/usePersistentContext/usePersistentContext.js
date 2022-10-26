@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export default function usePersistentContext(key) {
   const queryClient = useQueryClient();

@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import { createContext, useCallback } from "react";
 
 import Annotations from "../components/Annotations/Annotations.jsx";
 import NameModal from "../components/NameModal.jsx";
 import Participants from "../components/Participants";
 import ShareRoom from "../components/ShareRoom";
 import Toolbar from "../components/Toolbar";
+import VariantList from "../components/Variants/VariantList.jsx";
 import Viewer from "../components/Viewer.jsx";
 import { useGetUsersInSession } from "../queries/users/users-query";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 
 const url = import.meta.env.VITE_SOCKET_URL;
+
+export const Context = createContext({ mode: "view" });
 
 const Room = () => {
   const { roomId } = useParams();
@@ -53,26 +57,40 @@ const Room = () => {
   const onOrbitChanged = (transform) => {
     updateCamera(transform)
   }
+  const [mode, setMode] = useState("view");
+
+  const onModeChanged = useCallback(
+    (mode) => {
+      console.log(mode);
+      setMode(mode);
+    },
+    [setMode]
+  );
 
   return (
-    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500">
-      <NameModal onSubmit={onSubmitName} />
-      <div className="w-3/4 mx-auto bg-yellow text-center">
-        <Participants participants={participants} />
+    <Context.Provider value={{ mode }}>
+      <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
+        <NameModal onSubmit={onSubmitName} />
+        <div className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0">
+          <Viewer onOrbitChanged={onOrbitChanged} cameraTransform={cameraTransform} isFollowing={user?.id != "5f9d41c2-9451-4263-af84-a980591d15b1"} />
+        </div>
+        <div className="w-full text-center absolute top-0 left-0">
+          <Participants participants={participants} />
+        </div>
+        <div className="absolute right-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
+          <Annotations userId={user?.id} participants={participants} />
+        </div>
+        <div className="absolute left-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
+          <VariantList />
+        </div>
+        <div className="absolute bottom-2 left-2 z-10">
+          <Toolbar onModeChanged={onModeChanged} />
+        </div>
+        <div className="absolute bottom-2 right-2 z-10">
+          <ShareRoom />
+        </div>
       </div>
-      <div className="absolute right-2 top-1/4 bottom-1/4 z-[2] overflow-hidden">
-        <Annotations userId={user?.id} participants={participants} />
-      </div>
-      <div className="absolute bottom-2 left-2">
-        <Toolbar />
-      </div>
-      <div className="h-3/4 w-full flex justify-center items-center">
-        {!!user && <Viewer onOrbitChanged={onOrbitChanged} cameraTransform={cameraTransform} isFollowing={user.id != "5f9d41c2-9451-4263-af84-a980591d15b1"} />}
-      </div>
-      <div className="absolute bottom-2 right-2">
-        <ShareRoom />
-      </div>
-    </div>
+    </Context.Provider>
   );
 };
 

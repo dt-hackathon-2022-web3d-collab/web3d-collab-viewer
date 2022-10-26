@@ -13,10 +13,7 @@ const NameModal = ({ onSubmit }) => {
   };
 
   const renderModal = () => (
-    <div
-      tabIndex="-1"
-      className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center bg-gray-700 bg-opacity-50"
-    >
+    <div className="w-full h-full absolute z-20 bg-zinc-800/75">
       <div className="relative p-4 w-full max-w-md h-full md:h-auto mx-auto mt-16">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <div className="py-6 px-6 lg:px-8">

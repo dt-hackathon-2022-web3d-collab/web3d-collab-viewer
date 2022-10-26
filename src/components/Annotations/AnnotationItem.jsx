@@ -1,5 +1,5 @@
 export const AnnotationItem = ({ onClick, ...annotation }) => {
-  const { message, user } = annotation;
+  const { message, user, resolved } = annotation;
 
   const handleOnClick = (event) => {
     onClick?.(event, annotation);
@@ -7,7 +7,8 @@ export const AnnotationItem = ({ onClick, ...annotation }) => {
 
   return (
     <div className="bg-black/10 mb-2" onClick={handleOnClick}>
-      {message}
+      {resolved && <del>{message}</del>}
+      {!resolved && message}
       <br /> - {user.name} at {new Date(user.updatedAt).toLocaleString()}
     </div>
   );

@@ -1,21 +1,18 @@
-import { Planet, Pencil, ScribbleLoop } from "phosphor-react";
+import { CameraRotate, ChatCircleDots, ScribbleLoop } from "phosphor-react";
+import { RoundedButton } from "./RoundedButton";
 
-const ToolbarControl = ({ children }) => (
-  <div className="bg-white rounded m-1 p-3">{children}</div>
-);
-
-const Toolbar = () => {
+const Toolbar = ({ onModeChanged }) => {
   return (
     <div className="flex">
-      <ToolbarControl>
-        <Planet size={30} />
-      </ToolbarControl>
-      <ToolbarControl>
-        <Pencil size={30} />
-      </ToolbarControl>
-      <ToolbarControl>
+      <RoundedButton onClick={() => onModeChanged("view")}>
+        <CameraRotate size={30} />
+      </RoundedButton>
+      <RoundedButton onClick={() => onModeChanged("annotate")}>
+        <ChatCircleDots size={30} />
+      </RoundedButton>
+      <RoundedButton onClick={() => onModeChanged("point")}>
         <ScribbleLoop size={30} />
-      </ToolbarControl>
+      </RoundedButton>
     </div>
   );
 };
