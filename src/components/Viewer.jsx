@@ -7,17 +7,18 @@ const Viewer = () => {
 
    useEffect(() => {
       setup();
-    
+
       document.addEventListener("DOMContentLoaded", async () => {
 
-      
+
       });
-    
+
    }, []);
 
     async function setup() {
       const viewerDom = document.querySelector("needle-engine");
       setState({ viewer: viewerDom, context: await viewerDom?.getContext() });
+      console.log(viewerDom.context);
     }
 
     return (
