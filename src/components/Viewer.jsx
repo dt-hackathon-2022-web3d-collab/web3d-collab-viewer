@@ -1,33 +1,29 @@
 import { useEffect, useState } from "react";
 
 const Viewer = () => {
-    const [{viewer, context}, setState] = useState({
-      context: null, viewer: null,
-    });
+  const [{ viewer, context }, setState] = useState({
+    context: null,
+    viewer: null,
+  });
 
-   useEffect(() => {
-      setup();
+  useEffect(() => {
+    setup();
 
-      document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", async () => {});
+  }, []);
 
+  async function setup() {
+    const viewerDom = document.querySelector("needle-engine");
+    setState({ viewer: viewerDom, context: await viewerDom?.getContext() });
+    console.log(viewerDom.context);
+  }
 
-      });
-
-   }, []);
-
-    async function setup() {
-      const viewerDom = document.querySelector("needle-engine");
-      setState({ viewer: viewerDom, context: await viewerDom?.getContext() });
-      console.log(viewerDom.context);
-    }
-
-    return (
-      <needle-engine>
-          <div className="loading"></div>
-              <div id="overlay" className="overlay ar desktop">
-          </div>
-      </needle-engine>
-    )
-}
+  return (
+    <needle-engine>
+      <div className="loading"></div>
+      <div id="overlay" className="overlay ar desktop"></div>
+    </needle-engine>
+  );
+};
 
 export default Viewer;
