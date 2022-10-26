@@ -14,26 +14,40 @@ import { AnnotationItem } from "./AnnotationItem";
 import { AnnotationTextInput } from "./AnnotationTextInput";
 import { ReplyItem } from "./ReplyItem";
 
+const filters = ["All", "Unresolved", "Resolved"];
+
 const Annotations = ({ userId, participants }) => {
   const { roomId: sessionId } = useParams();
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedAnnotationId, setSelectedAnnotationId] = useState(null);
+  const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
   const queryClient = useQueryClient();
   const annotationsQuery = useGetAllAnnotations(sessionId);
   const annotations = annotationsQuery.data?.rows ?? [];
+  const filteredAnnotations = annotations.filter((annotation) => {
+    if (selectedFilterIndex === 0) {
+      return true;
+    }
+
+    if (selectedFilterIndex === 1) {
+      return !annotation.resolved;
+    }
+
+    return annotation.resolved;
+  });
   const createAnnotation = useCreateAnnotation();
   const createReply = useCreateReply();
   const resolveAnnotation = useResolveAnnotation();
   const unresolveAnnotation = useUnresolveAnnotation();
   const selected = annotations?.find(
-    (annotation) => annotation.id === selectedId
+    (annotation) => annotation.id === selectedAnnotationId
   );
 
   const handleSelect = (_event, annotation) => {
-    setSelectedId(annotation.id);
+    setSelectedAnnotationId(annotation.id);
   };
 
   const handleDeselect = () => {
-    setSelectedId(null);
+    setSelectedAnnotationId(null);
   };
 
   const handleAnnotation = async (event) => {
@@ -99,7 +113,24 @@ const Annotations = ({ userId, participants }) => {
   const annotationsView = (
     <>
       <h4>Annotations</h4>
-      {annotations.map((annotation, index) => (
+      <div className="flex flex-row justify-between items-center mb-2">
+        {filters.map((filter, index) => {
+          const commonClassName =
+            "px-[4px] border-[1px] border-black rounded-lg";
+          const className =
+            selectedFilterIndex === index
+              ? `${commonClassName} bg-black/20`
+              : commonClassName;
+          const handleClick = () => setSelectedFilterIndex(index);
+
+          return (
+            <div key={filter} className={className} onClick={handleClick}>
+              {filter}
+            </div>
+          );
+        })}
+      </div>
+      {filteredAnnotations.map((annotation, index) => (
         <AnnotationItem
           key={`annotation-${index}`}
           {...annotation}
@@ -142,7 +173,7 @@ const Annotations = ({ userId, participants }) => {
   );
 
   return (
-    <div className="bg-white h-full overflow-y-auto overflow-x-hidden">
+    <div className="bg-white h-full overflow-y-auto overflow-x-hidden w-[250px]">
       {!selected && annotationsView}
       {selected && repliesView}
     </div>
