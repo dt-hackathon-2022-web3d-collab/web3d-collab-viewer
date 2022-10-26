@@ -9,6 +9,7 @@ import Annotations from "../components/Annotations/Annotations.jsx";
 import VariantList from "../components/Variants/VariantList.jsx";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 import { useGetUsersInSession } from "../queries/users/users-query";
+import { usePersistentContext } from "../hooks/usePersistentContext/usePersistentContext.js";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
@@ -16,7 +17,7 @@ export const Context = createContext({ mode: "view" });
 
 const Room = () => {
   const { roomId } = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = usePersistentContext("user");
 
   const { data, refetch } = useGetUsersInSession(roomId);
 
@@ -33,8 +34,10 @@ const Room = () => {
 
   const onSubmitName = async (name) => {
     const user = await joinUser({ name, roomId });
-    console.log("Joined =>", user);
+
     setUser(user);
+
+    refetch();
   };
 
   const [mode, setMode] = useState("view");
