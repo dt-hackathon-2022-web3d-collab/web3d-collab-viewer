@@ -1,22 +1,23 @@
-import { useParams } from "react-router";
 import { colourClassArray } from "../constants/colours";
-import { useGetUsersInSession } from "../queries/users/users-query";
+import { avatarArray } from "../constants/avatars";
 
-const Participants = () => {
-  const { roomId } = useParams();
-  const { data } = useGetUsersInSession(roomId);
-  const participants = data?.rows ?? [];
-
+const Participants = ({ participants }) => {
   return participants.map((participant, index) => {
     const colourIndex = index % colourClassArray.length;
     const colour = colourClassArray[colourIndex];
-
+    const thumbImage = avatarArray[colourIndex];
     return (
-      <div
-        key={`participant-${index}`}
-        className={`inline-block p-3 m-1 ${colour}`}
-      >
-        {participant.name}
+      <div className="inline-block">
+        <div
+          key={`participant-${index}`}
+          className={`p-2 m-1 ${colour} rounded-full`}
+        >
+          <div
+            className="rounded-full bg-black w-16 h-16 bg-cover"
+            style={{ backgroundImage: `url('${thumbImage}')` }}
+          ></div>
+        </div>
+        <div className="font-bold">{participant.name}</div>
       </div>
     );
   });
