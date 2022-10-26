@@ -4,9 +4,8 @@ import ShareRoom from "../components/ShareRoom";
 import Toolbar from "../components/Toolbar";
 import Viewer from "../components/Viewer.jsx";
 import { useParams } from "react-router-dom";
-import AddAnnotation from "../components/AddAnnotation.jsx";
 import { useState } from "react";
-import Annotations from "../components/Annotations.jsx";
+import Annotations from "../components/Annotations/Annotations.jsx";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 
 const url = import.meta.env.VITE_SOCKET_URL;
@@ -31,8 +30,8 @@ const Room = () => {
       <div className="w-3/4 mx-auto bg-yellow text-center">
         <Participants />
       </div>
-      <div className="absolute left-0 top-1/4 z-[2]">
-        <Annotations />
+      <div className="absolute right-2 top-1/4 bottom-1/4 z-[2] overflow-hidden">
+        <Annotations userId={user?.id} />
       </div>
       <div className="absolute bottom-2 left-2">
         <Toolbar />
@@ -41,7 +40,6 @@ const Room = () => {
         {!!user && <Viewer />}
       </div>
       <div className="absolute bottom-2 right-2">
-        <AddAnnotation userId={user?.id} />
         <ShareRoom />
       </div>
     </div>

@@ -28,3 +28,25 @@ export const getAnnotation = async ({ sessionId, annotationId }) => {
 
   return response.json();
 };
+
+export const resolveAnnotation = async ({ sessionId, annotationId }) => {
+  const response = await fetch(
+    `${url}/v1/sessions/${sessionId}/annotations/${annotationId}/resolve`,
+    {
+      method: "POST",
+    }
+  );
+
+  return response.json();
+};
+
+export const unresolveAnnotation = async ({ sessionId, annotationId }) => {
+  const response = await fetch(
+    `${url}/v1/sessions/${sessionId}/annotations/${annotationId}/unresolve`,
+    {
+      method: "POST",
+    }
+  );
+
+  return response.json();
+};
