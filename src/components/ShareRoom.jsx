@@ -1,5 +1,6 @@
 import { Clipboard } from "phosphor-react";
 import { useParams } from "react-router-dom";
+import { RoundedButton } from "./RoundedButton";
 
 export default () => {
   const { roomId } = useParams();
@@ -9,11 +10,8 @@ export default () => {
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className="bg-white hover:bg-blue-700 font-bold py-2 px-4 rounded"
-    >
+    <RoundedButton onClick={handleClick}>
       <Clipboard size={32} />
-    </button>
+    </RoundedButton>
   );
 };

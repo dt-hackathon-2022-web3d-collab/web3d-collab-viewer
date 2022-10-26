@@ -3,6 +3,7 @@ const url = import.meta.env.VITE_REST_URL;
 export const createAnnotation = async ({ sessionId, body }) => {
   const response = await fetch(`${url}/v1/sessions/${sessionId}/annotations`, {
     method: "POST",
+    mode: "no-cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });

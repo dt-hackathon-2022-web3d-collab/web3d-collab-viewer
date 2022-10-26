@@ -1,21 +1,18 @@
 import { Planet, Pencil, ScribbleLoop } from "phosphor-react";
-
-const ToolbarControl = ({ children }) => (
-  <div className="bg-white rounded m-1 p-3">{children}</div>
-);
+import { RoundedButton } from "./RoundedButton";
 
 const Toolbar = () => {
   return (
     <div className="flex">
-      <ToolbarControl>
+      <RoundedButton>
         <Planet size={30} />
-      </ToolbarControl>
-      <ToolbarControl>
+      </RoundedButton>
+      <RoundedButton>
         <Pencil size={30} />
-      </ToolbarControl>
-      <ToolbarControl>
+      </RoundedButton>
+      <RoundedButton>
         <ScribbleLoop size={30} />
-      </ToolbarControl>
+      </RoundedButton>
     </div>
   );
 };
