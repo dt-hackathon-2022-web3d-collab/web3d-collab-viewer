@@ -40,18 +40,17 @@ export const useWebSocket = ({ onParticipantsUpdate }) => {
     socket.emit('ping');
   }
 
-  const joinUser = ({ name, roomId }) => {
-    socket.emit(
-      "join",
-      {
-        sessionId: roomId,
-        name,
-      },
-      (response) => {
-        console.log("==> joined", response);
-      }
-    );
-  };
+  const joinUser = ({ name, roomId }) =>
+    new Promise((resolve) => {
+      socket.current.emit(
+        "join",
+        {
+          sessionId: roomId,
+          name,
+        },
+        resolve
+      );
+    });
 
   return {
     joinUser,

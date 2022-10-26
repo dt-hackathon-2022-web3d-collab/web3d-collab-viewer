@@ -7,17 +7,16 @@ const Participants = ({ participants }) => {
     const colour = colourClassArray[colourIndex];
     const thumbImage = avatarArray[colourIndex];
     return (
-      <div className="inline-block">
-        <div
-          key={`participant-${index}`}
-          className={`p-2 m-1 ${colour} rounded-full`}
-        >
+      <div key={`participant-${index}`} className="inline-block">
+        <div className={`p-2 m-1 ${colour} rounded-full w-20`}>
           <div
             className="rounded-full bg-black w-16 h-16 bg-cover"
             style={{ backgroundImage: `url('${thumbImage}')` }}
           ></div>
         </div>
-        <div className="font-bold">{participant.name}</div>
+        <div className="font-bold truncate w-20" title={participant.name}>
+          {participant.name}
+        </div>
       </div>
     );
   });
