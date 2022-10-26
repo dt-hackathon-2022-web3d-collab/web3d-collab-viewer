@@ -1,11 +1,12 @@
+import { useParams } from "react-router-dom";
+import { useState } from "react";
 import NameModal from "../components/NameModal.jsx";
 import Participants from "../components/Participants";
 import ShareRoom from "../components/ShareRoom";
 import Toolbar from "../components/Toolbar";
 import Viewer from "../components/Viewer.jsx";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
+import { useGetUsersInSession } from "../queries/users/users-query";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
@@ -13,8 +14,17 @@ const Room = () => {
   const { roomId } = useParams();
   const [didJoin, setDidJoin] = useState(false);
 
+  const { data, refetch } = useGetUsersInSession(roomId);
+
+  const participants = data?.rows ?? [];
+
+  const onParticipantsUpdate = () => {
+    refetch();
+  };
+
   const { joinUser } = useWebSocket({
     url,
+    onParticipantsUpdate,
   });
 
   const onSubmitName = (name) => {
@@ -26,7 +36,7 @@ const Room = () => {
     <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500">
       <NameModal onSubmit={onSubmitName} />
       <div className="w-3/4 mx-auto bg-yellow text-center">
-        <Participants />
+        <Participants participants={participants} />
       </div>
       <div className="absolute bottom-2 left-2">
         <Toolbar />
@@ -35,7 +45,7 @@ const Room = () => {
         {didJoin && <Viewer />}
       </div>
       <div className="absolute bottom-2 right-2">
-        <ShareRoom/>
+        <ShareRoom />
       </div>
     </div>
   );
