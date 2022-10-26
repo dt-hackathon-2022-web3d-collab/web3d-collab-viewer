@@ -35,9 +35,10 @@ const Room = () => {
   };
 
   return (
-    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute z-0">
+    <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
       <NameModal onSubmit={onSubmitName} />
-      <div className="w-full h-full flex justify-center items-center absolute top-0 left-0">
+
+      <div className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0">
         <Viewer />
       </div>
       <div className="w-full text-center absolute top-0 left-0">
