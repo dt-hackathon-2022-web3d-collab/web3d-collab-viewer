@@ -43,8 +43,10 @@ const Room = () => {
   const participants = data?.rows ?? [];
 
   const userColorHex = useMemo(() => {
-    const userIndex = participants.findIndex(participant => participant.id === user?.id);
-    console.log(colourClassArray[userIndex % colourClassArray.length])
+    const userIndex = participants.findIndex(
+      (participant) => participant.id === user?.id
+    );
+    console.log(colourClassArray[userIndex % colourClassArray.length]);
     // ✨
     return tailWindColorsHex[
       colourClassArray[userIndex % colourClassArray.length]
@@ -113,18 +115,29 @@ const Room = () => {
     <Context.Provider value={{ mode, user }}>
       <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
         <NameModal onSubmit={onSubmitName} />
-        <div className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0" onClick={() => setSelectedParticipant()}>
-        <div className="annotation">
-            <p><strong>Cube</strong></p>
-            <p>In geometry, a cube is a three-dimensional solid object bounded by six square faces, facets or sides, with three meeting at each vertex.</p>
-        </div>
-        <canvas id="number" width="64" height="64"></canvas>
-          <Viewer onOrbitChanged={onOrbitChanged} 
-                  cameraTransform={cameraTransform} 
-                  isFollowing={!!selectedParticipant} 
-                  onAnnotation={(point) => console.log(`Annotating at ${point}`)} 
-                  isAnnotationsEnabled={mode === "annotate"}
-                  userColorHex={userColorHex} />
+        <div
+          className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0"
+          onClick={() => setSelectedParticipant()}
+        >
+          <div className="annotation">
+            <p>
+              <strong>Cube</strong>
+            </p>
+            <p>
+              In geometry, a cube is a three-dimensional solid object bounded by
+              six square faces, facets or sides, with three meeting at each
+              vertex.
+            </p>
+          </div>
+          <canvas id="number" width="64" height="64"></canvas>
+          <Viewer
+            onOrbitChanged={onOrbitChanged}
+            cameraTransform={cameraTransform}
+            isFollowing={!!selectedParticipant}
+            onAnnotation={(point) => console.log(`Annotating at ${point}`)}
+            isAnnotationsEnabled={mode === "annotate"}
+            userColorHex={userColorHex}
+          />
         </div>
         <div className="w-full text-center absolute top-0 left-0">
           <Participants
@@ -144,7 +157,7 @@ const Room = () => {
           />
         </div>
         <div className="absolute bottom-2 left-2 z-10">
-          <Toolbar onModeChanged={onModeChanged} />
+          <Toolbar mode={mode} onModeChanged={onModeChanged} />
         </div>
         <div className="absolute bottom-2 right-2 z-10">
           <ShareRoom />
