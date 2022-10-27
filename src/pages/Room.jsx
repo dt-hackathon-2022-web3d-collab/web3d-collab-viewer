@@ -17,6 +17,7 @@ import { queryIds as annotationsQueryIds } from "../queries/annotations/annotati
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
+import { useEffect } from "react";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
@@ -24,15 +25,23 @@ export const Context = createContext({ mode: modes.view });
 
 const Room = () => {
   const { roomId } = useParams();
-  const [user, setUser] = useState();
+  const [user, _setUser] = useState();
   const [cameraTransform, setCameraTransform] = useState({});
   const [selectedVariant, setSelectedVariant] = useState();
   const [selectedParticipant, _setSelectedParticipant] = useState();
+  const [isPointing, setIsPointing] = useState(false);
+  const [laser, setLaser] = useState(null);
 
   const selectedParticipantRef = useRef(selectedParticipant);
   const setSelectedParticipant = (data) => {
     selectedParticipantRef.current = data;
     _setSelectedParticipant(data);
+  };
+
+  const currentUserRef = useRef(user);
+  const setUser = (data) => {
+    currentUserRef.current = data;
+    _setUser(data);
   };
 
   const queryClient = useQueryClient();
@@ -66,6 +75,11 @@ const Room = () => {
     setSelectedParticipant(participant);
   };
 
+  const onLaserUpdate = (laserPointed) => {
+    if (laserPointed.userId === user?.id) return;
+    setLaser(laserPointed.pointer);
+  };
+
   const onCameraUpdate = (cameraUpdate) => {
     if (cameraUpdate.userId === selectedParticipantRef.current?.id)
       setCameraTransform(cameraUpdate.transform);
@@ -76,12 +90,13 @@ const Room = () => {
       setSelectedVariant(variantUpdated.variant);
   };
 
-  const { joinUser, updateCamera, updateVariant } = useWebSocket({
+  const { joinUser, updateCamera, updateVariant, updateLaser } = useWebSocket({
     url,
     onParticipantsUpdate,
     onCameraUpdate,
     onVariantUpdate,
     onAnnotationsUpdate,
+    onLaserUpdate,
   });
 
   const onSubmitName = async (name) => {
@@ -103,14 +118,22 @@ const Room = () => {
     setSelectedVariant(variant);
   };
 
+  const onLaserChanged = (laserPointed) => {
+    updateLaser(laserPointed);
+  };
+
   const [mode, setMode] = useState(modes.view);
 
   const onModeChanged = useCallback(
-    (mode) => {
-      console.log(mode);
-      setMode(mode);
+    (newMode) => {
+      if (newMode === modes.point && mode !== modes.point) {
+        setIsPointing(true);
+      } else if (mode === modes.point && newMode !== mode.point) {
+        setIsPointing(false);
+      }
+      setMode(newMode);
     },
-    [setMode]
+    [mode, setMode, setIsPointing]
   );
 
   return (
@@ -133,12 +156,15 @@ const Room = () => {
           </div>
           <canvas id="number" width="64" height="64"></canvas>
           <Viewer
+            onLaserChanged={onLaserChanged}
             onOrbitChanged={onOrbitChanged}
             cameraTransform={cameraTransform}
+            laser={laser}
             isFollowing={!!selectedParticipant}
             onAnnotation={(point) => console.log(`Annotating at ${point}`)}
             isAnnotationsEnabled={mode === modes.annotate}
             userColorHex={userColorHex}
+            isPointing={isPointing}
           />
         </div>
         <div className="w-full text-center absolute top-0 left-0">
