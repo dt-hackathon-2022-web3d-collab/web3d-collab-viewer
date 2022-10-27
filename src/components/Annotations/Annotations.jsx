@@ -1,30 +1,34 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, CheckCircle, XCircle } from "phosphor-react";
-import { useState } from "react";
-import { useParams } from "react-router";
 import {
   queryIds as annotationQueryIds,
   useCreateAnnotation,
-  useGetAllAnnotations,
   useResolveAnnotation,
   useUnresolveAnnotation,
 } from "../../queries/annotations/annotations-query";
-import { useCreateReply } from "../../queries/replies/replies-query";
+
 import { AnnotationItem } from "./AnnotationItem";
 import { AnnotationTextInput } from "./AnnotationTextInput";
+import { DrawerToggle } from "../DrawerToggle";
 import { ReplyItem } from "./ReplyItem";
 import classNames from "classnames";
-import { DrawerToggle } from "../DrawerToggle";
+import { useCreateReply } from "../../queries/replies/replies-query";
+import { useParams } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 const filters = ["All", "Unresolved", "Resolved"];
 
-const Annotations = ({ userId, participants, selectedVariant }) => {
+const Annotations = ({
+  userId,
+  participants,
+  annotations = [],
+  selectedVariant,
+}) => {
   const { roomId: sessionId } = useParams();
   const [selectedAnnotationId, setSelectedAnnotationId] = useState(null);
   const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
   const queryClient = useQueryClient();
-  const annotationsQuery = useGetAllAnnotations(sessionId);
-  const annotations = annotationsQuery.data?.rows ?? [];
+
   const filteredAnnotations = annotations.filter((annotation) => {
     if (selectedFilterIndex === 0) {
       return true;
