@@ -94,17 +94,17 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged, onAnnotation, isA
 
 
     useEffect(() => {
-      if(!isAnnotationsEnabled) return; 
+      if (!isAnnotationsEnabled) return;
 
-      const clickListener = viewer.addEventListener('click', () => {
+      const listener = () => {
         const intersection = castRayFromCamera();
-        if(intersection) addAnnotationPoint(intersection);
-      });
+        if (intersection) addAnnotationPoint(intersection);
+      };
+      viewer.addEventListener("click", listener);
 
       return () => {
-        if(!isAnnotationsEnabled && clickListener)
-          viewer.removeListener('click', clickListener); 
-      }
+        viewer.removeEventListener("click", listener);
+      };
     }, [isAnnotationsEnabled]);
     
 
