@@ -29,7 +29,6 @@ const Room = () => {
   const [cameraTransform, setCameraTransform] = useState({});
   const [selectedVariant, setSelectedVariant] = useState();
   const [selectedParticipant, _setSelectedParticipant] = useState();
-  const [isPointing, setIsPointing] = useState(false);
   const [laser, setLaser] = useState(null);
 
   const selectedParticipantRef = useRef(selectedParticipant);
@@ -126,14 +125,9 @@ const Room = () => {
 
   const onModeChanged = useCallback(
     (newMode) => {
-      if (newMode === modes.point && mode !== modes.point) {
-        setIsPointing(true);
-      } else if (mode === modes.point && newMode !== mode.point) {
-        setIsPointing(false);
-      }
       setMode(newMode);
     },
-    [mode, setMode, setIsPointing]
+    [mode]
   );
 
   return (
@@ -164,7 +158,7 @@ const Room = () => {
             onAnnotation={(point) => console.log(`Annotating at ${point}`)}
             isAnnotationsEnabled={mode === modes.annotate}
             userColorHex={userColorHex}
-            isPointing={isPointing}
+            isPointing={mode === modes.point}
           />
         </div>
         <div className="w-full text-center absolute top-0 left-0">

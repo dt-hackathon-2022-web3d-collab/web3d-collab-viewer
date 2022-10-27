@@ -222,25 +222,18 @@ const Viewer = ({
   const [wasPointing, setWasPointing] = useState(false);
 
   useEffect(() => {
-    if (viewer && isPointing !== wasPointing) {
+    if (isPointing !== wasPointing) {
       setWasPointing(isPointing);
       toggleOrbitControls(!isPointing);
       if (isPointing) {
-        viewer.addEventListener("pointermove", pointLaser);
+        window.addEventListener("pointermove", pointLaser);
         onLaserChanged("starting");
       } else {
-        viewer.removeEventListener("pointermove", pointLaser);
+        window.removeEventListener("pointermove", pointLaser);
         onLaserChanged("ending");
       }
     }
-  }, [
-    isPointing,
-    viewer,
-    pointLaser,
-    onLaserChanged,
-    wasPointing,
-    setWasPointing,
-  ]);
+  }, [isPointing, pointLaser, onLaserChanged, wasPointing, setWasPointing]);
 
   useEffect(() => {
     if (!context) return;

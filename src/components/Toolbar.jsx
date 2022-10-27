@@ -24,13 +24,16 @@ const buttons = {
 };
 
 const Toolbar = ({ mode, onModeChanged }) => {
-  const handleKeyPress = useCallback((event) => {
-    const newMode = keyCodes[event.keyCode];
+  const handleKeyPress = useCallback(
+    (event) => {
+      const newMode = keyCodes[event.keyCode];
 
-    if (newMode) {
-      onModeChanged(newMode);
-    }
-  }, []);
+      if (newMode) {
+        onModeChanged(newMode);
+      }
+    },
+    [onModeChanged]
+  );
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyPress);
