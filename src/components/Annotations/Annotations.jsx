@@ -112,7 +112,7 @@ const Annotations = ({ userId, participants }) => {
 
   const annotationsView = (
     <>
-      <h4>Annotations</h4>
+      <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
       <div className="flex flex-row justify-between items-center mb-2">
         {filters.map((filter, index) => {
           const commonClassName =
@@ -137,7 +137,6 @@ const Annotations = ({ userId, participants }) => {
           onClick={handleSelect}
         />
       ))}
-      <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
     </>
   );
 

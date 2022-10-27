@@ -166,6 +166,9 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged, onAnnotation, isA
       setupCamera();
       setupRaycaster();
       setupListeners();
+
+      // set renderer to transparent and use css to set background.
+      context.renderer.setClearColor(0xffffff, 0);
     }
 
     useEffect(() => {

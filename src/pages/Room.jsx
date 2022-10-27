@@ -111,7 +111,7 @@ const Room = () => {
 
   return (
     <Context.Provider value={{ mode, user }}>
-      <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
+      <div className="absolute w-full h-full bg-gradient-radial from-neutral-400 via-neutral-250 to-neutral-100">
         <NameModal onSubmit={onSubmitName} />
         <div
           className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0"
