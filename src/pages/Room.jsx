@@ -171,12 +171,15 @@ const Room = () => {
             selectedParticipant={selectedParticipant}
           />
         </div>
-        <div className="absolute right-2 top-1/4 bottom-1/4 z-10">
-          <Annotations
-            userId={user?.id}
-            participants={participants}
-            selectedVariant={selectedVariant}
-          />
+        <div>
+          <div className="absolute right-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
+            <Annotations
+              isAnotating={false}
+              annotationId={"afe90d99-adcd-4de4-ab6f-2786735d188e"}
+              userId={user?.id}
+              participants={participants}
+            />
+          </div>
         </div>
         <div className="absolute left-2 top-1/4 bottom-1/4 z-10 w-1/3">
           <VariantList
