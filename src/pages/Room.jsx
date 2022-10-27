@@ -85,10 +85,12 @@ const Room = () => {
   });
 
   const onSubmitName = async (name) => {
-    const user = await joinUser({ name, roomId });
+    const newUser = await joinUser({ name, roomId });
 
-    setUser(user);
-    queryClient.invalidateQueries(usersQueryIds.useGetUsersInSession(roomId));
+    setUser(newUser);
+    await queryClient.invalidateQueries(
+      usersQueryIds.useGetUsersInSession(roomId)
+    );
   };
 
   const onOrbitChanged = (transform) => {
