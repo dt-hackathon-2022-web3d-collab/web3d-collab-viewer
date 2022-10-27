@@ -119,10 +119,24 @@ const Room = () => {
           className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0"
           onClick={() => setSelectedParticipant()}
         >
+          <div className="annotation">
+            <p>
+              <strong>Cube</strong>
+            </p>
+            <p>
+              In geometry, a cube is a three-dimensional solid object bounded by
+              six square faces, facets or sides, with three meeting at each
+              vertex.
+            </p>
+          </div>
+          <canvas id="number" width="64" height="64"></canvas>
           <Viewer
             onOrbitChanged={onOrbitChanged}
             cameraTransform={cameraTransform}
             isFollowing={!!selectedParticipant}
+            isRaycastEnabled={true}
+            onRaycastHit={() => {}}
+            userColorHex={userColorHex}
           />
         </div>
         <div className="w-full text-center absolute top-0 left-0">
