@@ -14,6 +14,7 @@ import { AnnotationItem } from "./AnnotationItem";
 import { AnnotationTextInput } from "./AnnotationTextInput";
 import { ReplyItem } from "./ReplyItem";
 import classNames from "classnames";
+import { DrawerToggle } from "../DrawerToggle";
 
 const filters = ["All", "Unresolved", "Resolved"];
 
@@ -177,11 +178,33 @@ const Annotations = ({ userId, participants }) => {
     </>
   );
 
+  const [drawerOpen, setDrawerOpen] = useState(true);
+
   return (
-    <div className="bg-white h-full overflow-y-auto overflow-x-hidden w-[250px]">
-      {!selected && annotationsView}
-      {selected && repliesView}
-    </div>
+    <>
+      <div id="" className="ml-2 mb-2 flex flex-row-reverse">
+        <DrawerToggle
+          direction={drawerOpen ? "in" : "out"}
+          onClick={() => setDrawerOpen(!drawerOpen)}
+        />
+      </div>
+
+      <div className="h-full overflow-y-auto overflow-x-hidden w-[250px]">
+        <div
+          id="Annotation"
+          className={classNames(
+            "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform",
+            {
+              "translate-x-[22rem]": !drawerOpen,
+              "translate-x-0": drawerOpen,
+            }
+          )}
+        >
+          {!selected && annotationsView}
+          {selected && repliesView}
+        </div>
+      </div>
+    </>
   );
 };
 

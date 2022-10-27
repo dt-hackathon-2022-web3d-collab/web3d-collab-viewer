@@ -144,7 +144,7 @@ const Room = () => {
             selectedParticipant={selectedParticipant}
           />
         </div>
-        <div className="absolute right-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
+        <div className="absolute right-2 top-1/4 bottom-1/4 z-10">
           <Annotations userId={user?.id} participants={participants} />
         </div>
         <div className="absolute left-2 top-1/4 bottom-1/4 z-10 w-1/3">

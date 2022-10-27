@@ -6,7 +6,10 @@ export const AnnotationItem = ({ onClick, ...annotation }) => {
   };
 
   return (
-    <div className="bg-black/10 mb-2" onClick={handleOnClick}>
+    <div
+      className="bg-black/10 mb-2 rounded border border-white"
+      onClick={handleOnClick}
+    >
       {resolved && <del>{message}</del>}
       {!resolved && message}
       <br /> - {user.name} at {new Date(user.updatedAt).toLocaleString()}

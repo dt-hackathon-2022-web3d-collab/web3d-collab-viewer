@@ -1,18 +1,10 @@
 import { useEffect, useState } from "react";
 
 import VariantItem from "./VariantItem.jsx";
-import { CaretLeft, CaretRight } from "phosphor-react";
+
 import classNames from "classnames";
 
-const Toggle = ({ direction, ...rest }) => (
-  <div
-    className="w-10 h-10 bg-white rounded drop-shadow-md flex items-center justify-center"
-    {...rest}
-  >
-    {direction === "in" && <CaretLeft size={24} />}
-    {direction === "out" && <CaretRight size={24} />}
-  </div>
-);
+import { DrawerToggle } from "../DrawerToggle";
 
 const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
   const [variantOptions, setVariantOptions] = useState([]);
@@ -45,7 +37,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
   return (
     <div className="w-[15rem]">
       <div className="ml-2 mb-2">
-        <Toggle
+        <DrawerToggle
           direction={drawerOpen ? "in" : "out"}
           onClick={() => setDrawerOpen(!drawerOpen)}
         />
