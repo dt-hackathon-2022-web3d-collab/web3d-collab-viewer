@@ -85,18 +85,22 @@ const Room = () => {
   });
 
   const onSubmitName = async (name) => {
-    const user = await joinUser({ name, roomId });
+    const newUser = await joinUser({ name, roomId });
 
-    setUser(user);
-    queryClient.invalidateQueries(usersQueryIds.useGetUsersInSession(roomId));
+    setUser(newUser);
+    await queryClient.invalidateQueries(
+      usersQueryIds.useGetUsersInSession(roomId)
+    );
   };
 
   const onOrbitChanged = (transform) => {
     updateCamera(transform);
+    setCameraTransform(transform);
   };
 
   const onVariantChanged = (variant) => {
     updateVariant(variant);
+    setSelectedVariant(variant);
   };
 
   const [mode, setMode] = useState(modes.view);
@@ -145,7 +149,11 @@ const Room = () => {
           />
         </div>
         <div className="absolute right-2 top-1/4 bottom-1/4 z-10">
-          <Annotations userId={user?.id} participants={participants} />
+          <Annotations
+            userId={user?.id}
+            participants={participants}
+            selectedVariant={selectedVariant}
+          />
         </div>
         <div className="absolute left-2 top-1/4 bottom-1/4 z-10 w-1/3">
           <VariantList

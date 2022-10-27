@@ -18,7 +18,7 @@ import { DrawerToggle } from "../DrawerToggle";
 
 const filters = ["All", "Unresolved", "Resolved"];
 
-const Annotations = ({ userId, participants }) => {
+const Annotations = ({ userId, participants, selectedVariant }) => {
   const { roomId: sessionId } = useParams();
   const [selectedAnnotationId, setSelectedAnnotationId] = useState(null);
   const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
@@ -65,7 +65,7 @@ const Annotations = ({ userId, participants }) => {
 
     button.disabled = true;
     input.disabled = true;
-    const body = { message, userId, position: 0 };
+    const body = { message, userId, position: 0, variantId: selectedVariant };
     await createAnnotation.mutateAsync({ sessionId, body });
     queryClient.invalidateQueries(
       annotationQueryIds.useGetAllAnnotations(sessionId)
