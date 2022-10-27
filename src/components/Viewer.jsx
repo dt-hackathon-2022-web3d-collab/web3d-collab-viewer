@@ -70,6 +70,7 @@ const Viewer = ({
 
   useEffect(() => {
     if (context) {
+      console.log(annotations.length);
       setupAnnotations();
     }
   }, [annotations, context]);
@@ -123,10 +124,9 @@ const Viewer = ({
     ctx.font = "32px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(annotations.length + 1, x, y);
+    ctx.fillText(annotations.length, x, y);
 
     let sprite;
-    let mesh;
     let spriteBehindObject;
     const annotation = document.querySelector(".annotation");
 
@@ -146,7 +146,6 @@ const Viewer = ({
     sprite.position.copy(target);
     sprite.scale.set(0.08, 0.08, 0.08);
 
-    annotations.push(sprite);
     context.scene.add(sprite);
 
     const vector = new THREE.Vector3(target);

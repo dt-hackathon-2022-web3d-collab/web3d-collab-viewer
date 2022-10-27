@@ -214,6 +214,10 @@ const Room = () => {
           <ShareRoom />
         </div>
       </div>
+      <AnnotationsModal
+        showModal={isAnnotationsOpen}
+        onCancel={onCancelNewAnnotation}
+      />
     </Context.Provider>
   );
 };
