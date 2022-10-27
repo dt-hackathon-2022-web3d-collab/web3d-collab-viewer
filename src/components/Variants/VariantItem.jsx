@@ -18,7 +18,9 @@ const VariantItem = ({ label, onClick, annotations, thumbImage }) => {
       onMouseLeave={() => setHovering(false)}
       style={{
         backgroundImage: `url('${thumbImage}')`,
-        backgroundSize: "3rem",
+        backgroundSize: "10rem",
+        backgroundPositionX: "-2.5rem",
+        backgroundPositionY: "-1rem",
       }}
     >
       <div
