@@ -189,16 +189,18 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
         />
       </div>
 
-      <div className="h-full overflow-y-auto overflow-x-hidden w-[250px]">
+      <div
+        className={classNames(
+          "h-full overflow-y-auto overflow-x-hidden transition-transform w-[250px]",
+          {
+            "translate-x-[22rem]": !drawerOpen,
+            "translate-x-0": drawerOpen,
+          }
+        )}
+      >
         <div
           id="Annotation"
-          className={classNames(
-            "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform",
-            {
-              "translate-x-[22rem]": !drawerOpen,
-              "translate-x-0": drawerOpen,
-            }
-          )}
+          className="ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded"
         >
           {!selected && annotationsView}
           {selected && repliesView}
