@@ -125,7 +125,7 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
             <div
               key={filter}
               className={classNames(
-                "px-[4px] border-[1px] border-black rounded-lg",
+                "px-[4px] border border-black rounded-lg cursor-pointer",
                 {
                   "bg-black/20": filterSelected,
                 }
