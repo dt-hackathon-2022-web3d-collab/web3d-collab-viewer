@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
 import io from "socket.io-client";
+import { usePersistentContext } from "../usePersistentContext/usePersistentContext";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
-
 const socket = io(url);
 
-export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate, onVariantUpdate }) => {
+export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate, onVariantUpdate, onAnnotationsUpdate }) => {
   const [isConnected, setIsConnected] = useState();
-  
+
+  const [user, setUser] = usePersistentContext("user");
+
   useEffect(() => {
     if(isConnected) return;
     
@@ -20,9 +22,14 @@ export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate, onVariantUp
     socket.on('disconnect', () => {
       console.log('disconnected')
       setIsConnected(false);
+      setUser(null);
     });
 
-    socket.on('pong', () => {
+    socket.on("ping", () => {
+      console.log("ping");
+    });
+
+    socket.on("pong", () => {
       setLastPong(new Date().toISOString());
     });
 
@@ -42,18 +49,24 @@ export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate, onVariantUp
       if(onVariantUpdate) {
         onVariantUpdate(variant);
       };
-    })
+    });
+
+    socket.on("annotations", () => {
+      if (onAnnotationsUpdate) {
+        onAnnotationsUpdate();
+      }
+    });
 
     return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.off('pong');
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("pong");
     };
   }, []);
 
   const sendPing = () => {
-    socket.emit('ping');
-  }
+    socket.emit("ping");
+  };
 
   const joinUser = ({ name, roomId }) =>
     new Promise((resolve) => {

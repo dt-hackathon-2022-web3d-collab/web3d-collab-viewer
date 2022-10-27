@@ -1,4 +1,5 @@
 import { createContext, useCallback } from "react";
+import { useGetUsersInSession, queryIds as usersQueryIds } from "../queries/users/users-query";
 
 import Annotations from "../components/Annotations/Annotations.jsx";
 import NameModal from "../components/NameModal.jsx";
@@ -7,8 +8,9 @@ import ShareRoom from "../components/ShareRoom";
 import Toolbar from "../components/Toolbar";
 import VariantList from "../components/Variants/VariantList.jsx";
 import Viewer from "../components/Viewer.jsx";
-import { useGetUsersInSession } from "../queries/users/users-query";
+import { queryIds as annotationsQueryIds } from "../queries/annotations/annotations-query.js";
 import { useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 
@@ -24,12 +26,19 @@ const Room = () => {
   const [selectedVariant, setSelectedVariant] = useState();
   const isFollowing = user?.name == "follow";
 
-  const { data, refetch } = useGetUsersInSession(roomId);
+  const queryClient = useQueryClient();
+  const { data } = useGetUsersInSession(roomId);
 
   const participants = data?.rows ?? [];
 
   const onParticipantsUpdate = () => {
-    refetch();
+    queryClient.invalidateQueries(usersQueryIds.useGetUsersInSession(roomId));
+  };
+
+  const onAnnotationsUpdate = () => {
+    queryClient.invalidateQueries(
+      annotationsQueryIds.useGetAllAnnotations(roomId)
+    );
   };
 
   const onCameraUpdate = (cameraUpdate) => {
@@ -47,12 +56,14 @@ const { joinUser, updateCamera, updateVariant } = useWebSocket({
     onParticipantsUpdate,
     onCameraUpdate,
     onVariantUpdate,
+    onAnnotationsUpdate,
   });
 
   const onSubmitName = async (name) => {
     const user = await joinUser({ name, roomId });
-    console.log("Joined =>", user);
+
     setUser(user);
+    queryClient.invalidateQueries(usersQueryIds.useGetUsersInSession(roomId));
   };
 
   const onOrbitChanged = (transform) => {
@@ -74,7 +85,7 @@ const { joinUser, updateCamera, updateVariant } = useWebSocket({
   );
 
   return (
-    <Context.Provider value={{ mode }}>
+    <Context.Provider value={{ mode, user }}>
       <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
         <NameModal onSubmit={onSubmitName} />
         <div className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0">
