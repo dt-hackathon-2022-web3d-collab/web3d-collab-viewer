@@ -1,14 +1,16 @@
 import "./annotations.css";
 
 import { useEffect, useState } from "react";
-import { useCallback } from "react";
+
 import { LaserTag } from "./LaserTag";
+import { useCallback } from "react";
+import { useRef } from "react";
 
 let THREE;
 let raycaster;
 let pointer;
 let laserTag;
-const annotations = [];
+const annotationPoints = [];
 
 const Viewer = ({
   cameraTransform,
@@ -16,15 +18,19 @@ const Viewer = ({
   isFollowing,
   onOrbitChanged,
   onLaserChanged,
-  onAnnotation,
   isAnnotationsEnabled,
   userColorHex,
   isPointing,
+  annotations = [],
+  onNewAnnotation,
+  newAnnotation,
 }) => {
   const [{ viewer, context }, setState] = useState({
     context: null,
     viewer: null,
   });
+
+  const newAnnotationRef = useRef();
 
   function onPointerMove(event) {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -40,6 +46,58 @@ const Viewer = ({
       return intersects[i].point;
     }
   }
+
+  useEffect(() => {
+    if (newAnnotationRef.current && !newAnnotation) {
+      context.scene.remove(newAnnotationRef.current);
+      newAnnotationRef.current = null;
+    }
+  }, [newAnnotation]);
+
+  const clearAnnotations = () => {
+    annotationPoints.forEach((annotationPoint) => {
+      context.scene.remove(annotationPoint);
+    });
+  };
+
+  const setupAnnotations = () => {
+    clearAnnotations();
+    annotations.forEach((annotation) => {
+      const ann = addAnnotationPoint(new THREE.Vector3());
+      annotationPoints.push(ann);
+    });
+  };
+
+  useEffect(() => {
+    if (context) {
+      console.log(annotations.length);
+      setupAnnotations();
+    }
+  }, [annotations, context]);
+
+  useEffect(() => {
+    if (!isAnnotationsEnabled) return;
+
+    const listener = () => {
+      const intersection = castRayFromCamera();
+      if (intersection) {
+        newAnnotationRef.current = addAnnotationPoint(
+          intersection,
+          "new-annotation"
+        );
+        onNewAnnotation(intersection);
+      }
+    };
+    viewer.addEventListener("click", listener);
+
+    return () => {
+      viewer.removeEventListener("click", listener);
+    };
+  }, [isAnnotationsEnabled]);
+
+  useEffect(() => {
+    init();
+  }, []);
 
   function addAnnotationPoint(target) {
     // Yeah, I know
@@ -66,10 +124,9 @@ const Viewer = ({
     ctx.font = "32px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(annotations.length + 1, x, y);
+    ctx.fillText(annotations.length, x, y);
 
     let sprite;
-    let mesh;
     let spriteBehindObject;
     const annotation = document.querySelector(".annotation");
 
@@ -89,7 +146,6 @@ const Viewer = ({
     sprite.position.copy(target);
     sprite.scale.set(0.08, 0.08, 0.08);
 
-    annotations.push(sprite);
     context.scene.add(sprite);
 
     const vector = new THREE.Vector3(target);
@@ -107,26 +163,8 @@ const Viewer = ({
     annotation.style.left = `${vector.x}px`;
     annotation.style.opacity = spriteBehindObject ? 0.25 : 1;
 
-    if (onAnnotation) onAnnotation(target);
+    return sprite;
   }
-
-  useEffect(() => {
-    if (!isAnnotationsEnabled) return;
-
-    const listener = () => {
-      const intersection = castRayFromCamera();
-      if (intersection) addAnnotationPoint(intersection);
-    };
-    viewer.addEventListener("click", listener);
-
-    return () => {
-      viewer.removeEventListener("click", listener);
-    };
-  }, [isAnnotationsEnabled]);
-
-  useEffect(() => {
-    init();
-  }, []);
 
   const toggleOrbitControls = (isEnabled) => {
     const orbitControls =

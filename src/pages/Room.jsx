@@ -1,11 +1,16 @@
+import {
+  queryIds as annotationsQueryIds,
+  useGetAllAnnotations,
+} from "../queries/annotations/annotations-query.js";
 import { colourClassArray, tailWindColorsHex } from "../constants/colours";
 import { createContext, useCallback, useMemo, useRef, useState } from "react";
 import {
-  queryIds as usersQueryIds,
   useGetUsersInSession,
+  queryIds as usersQueryIds,
 } from "../queries/users/users-query";
 
 import Annotations from "../components/Annotations/Annotations.jsx";
+import AnnotationsModal from "../components/Annotations/AnnotationsModal";
 import NameModal from "../components/NameModal.jsx";
 import Participants from "../components/Participants";
 import ShareRoom from "../components/ShareRoom";
@@ -13,11 +18,10 @@ import Toolbar from "../components/Toolbar";
 import VariantList from "../components/Variants/VariantList.jsx";
 import Viewer from "../components/Viewer.jsx";
 import modes from "../constants/modes.js";
-import { queryIds as annotationsQueryIds } from "../queries/annotations/annotations-query.js";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
-import { useEffect } from "react";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
@@ -30,7 +34,8 @@ const Room = () => {
   const [selectedVariant, setSelectedVariant] = useState();
   const [selectedParticipant, _setSelectedParticipant] = useState();
   const [laser, setLaser] = useState(null);
-
+  const [isAnnotationsOpen, setIsAnnotationsOpen] = useState();
+  const [newAnnotation, setNewAnnotation] = useState();
   const selectedParticipantRef = useRef(selectedParticipant);
   const setSelectedParticipant = (data) => {
     selectedParticipantRef.current = data;
@@ -45,6 +50,9 @@ const Room = () => {
 
   const queryClient = useQueryClient();
   const { data } = useGetUsersInSession(roomId);
+
+  const annotationsQuery = useGetAllAnnotations(roomId);
+  const annotations = annotationsQuery.data?.rows ?? [];
 
   const participants = data?.rows ?? [];
 
@@ -128,6 +136,18 @@ const Room = () => {
     [mode]
   );
 
+  const onCancelNewAnnotation = () => {
+    setNewAnnotation();
+    setIsAnnotationsOpen(false);
+  };
+
+  const onAnnotationPoint = (point) => {
+    setNewAnnotation({
+      position: point,
+    });
+    setIsAnnotationsOpen(true);
+  };
+
   return (
     <Context.Provider value={{ mode, user }}>
       <div className="absolute w-full h-full bg-gradient-radial from-neutral-400 via-neutral-250 to-neutral-100">
@@ -158,8 +178,10 @@ const Room = () => {
             cameraTransform={cameraTransform}
             laser={laser}
             isFollowing={!!selectedParticipant}
-            onAnnotation={(point) => console.log(`Annotating at ${point}`)}
+            onNewAnnotation={onAnnotationPoint}
+            newAnnotation={newAnnotation}
             isAnnotationsEnabled={mode === modes.annotate}
+            annotations={annotations}
             userColorHex={userColorHex}
             isPointing={mode === modes.point}
           />
@@ -174,6 +196,7 @@ const Room = () => {
         <div>
           <div className="absolute right-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
             <Annotations
+              annotations={annotations}
               isAnotating={false}
               annotationId={"c207c8e0-a62d-446e-8555-99eebd421c19"}
               userId={user?.id}
@@ -195,6 +218,10 @@ const Room = () => {
           <ShareRoom />
         </div>
       </div>
+      <AnnotationsModal
+        showModal={isAnnotationsOpen}
+        onCancel={onCancelNewAnnotation}
+      />
     </Context.Provider>
   );
 };
