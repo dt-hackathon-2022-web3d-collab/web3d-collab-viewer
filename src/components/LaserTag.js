@@ -5,7 +5,11 @@ export class LaserTag {
     const THREE = this.THREE;
     this.beam = new THREE.Mesh(
       new THREE.CylinderGeometry(1, 1, 1, 8),
-      new THREE.MeshBasicMaterial({ color: 0x000000 })
+      new THREE.MeshBasicMaterial({
+        transparent: true,
+        opacity: 0.5,
+        color: 0x000000,
+      })
     );
     this.beam.scale.set(0.01, 1, 0.01);
     context.scene.add(this.beam);

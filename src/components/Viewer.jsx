@@ -21,6 +21,7 @@ const Viewer = ({
   userColorHex,
   isPointing,
 }) => {
+  console.log(userColorHex);
   const [{ viewer, context }, setState] = useState({
     context: null,
     viewer: null,
@@ -198,9 +199,13 @@ const Viewer = ({
 
       const farPoint = new THREE.Vector3();
       raycaster.ray.at(10, farPoint);
-      onLaserChanged({ from: camera.position, to: farPoint });
+      onLaserChanged({
+        from: camera.position,
+        to: farPoint,
+        color: userColorHex,
+      });
     },
-    [context, onLaserChanged, isPointing]
+    [context, onLaserChanged, isPointing, userColorHex]
   );
 
   useEffect(() => {
@@ -210,6 +215,7 @@ const Viewer = ({
       laserTag?.hide();
     } else {
       laserTag?.point(laser.from, laser.to);
+      laserTag?.color(laser.color);
     }
   }, [laser]);
 

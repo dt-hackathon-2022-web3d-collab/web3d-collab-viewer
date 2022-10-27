@@ -56,7 +56,7 @@ const Room = () => {
     console.log(colourClassArray[userIndex % colourClassArray.length]);
     // ✨
     return tailWindColorsHex[
-      colourClassArray[userIndex % colourClassArray.length]
+      colourClassArray[userIndex % colourClassArray.length]?.substring(3)
     ];
   }, [user]);
 
