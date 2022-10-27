@@ -16,6 +16,7 @@ const Viewer = ({
   isFollowing,
   onOrbitChanged,
   onLaserChanged,
+  onAnnotation,
   isAnnotationsEnabled,
   userColorHex,
   isPointing,
