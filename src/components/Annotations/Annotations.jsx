@@ -125,7 +125,6 @@ const Annotations = ({ userId, participants, isAnotating, annotationId }) => {
     const showFilters = false;
     return (
       <div className="bg-yellow border border-red-500">
-        z
         {showFilters && (
           <>
             <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
@@ -210,8 +209,8 @@ const Annotations = ({ userId, participants, isAnotating, annotationId }) => {
         className={classNames(
           "h-full overflow-y-auto overflow-x-hidden transition-transform w-[250px]",
           {
-            "translate-x-[22rem]": !drawerOpen,
-            "translate-x-0": drawerOpen,
+            "translate-x-[22rem]": !isOpen,
+            "translate-x-0": isOpen,
           }
         )}
       >

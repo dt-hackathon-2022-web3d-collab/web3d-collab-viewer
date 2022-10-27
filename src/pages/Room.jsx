@@ -175,7 +175,7 @@ const Room = () => {
           <div className="absolute right-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
             <Annotations
               isAnotating={false}
-              annotationId={"afe90d99-adcd-4de4-ab6f-2786735d188e"}
+              annotationId={"c207c8e0-a62d-446e-8555-99eebd421c19"}
               userId={user?.id}
               participants={participants}
             />
