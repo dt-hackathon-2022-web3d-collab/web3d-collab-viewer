@@ -45,12 +45,14 @@ const Toolbar = ({ mode, onModeChanged }) => {
     <div className="flex backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white rounded">
       {Object.entries(buttons).map(([key, icon]) => (
         <div key={key} className="flex flex-col">
-          {/* <CharKey>{modeKeys[key]}</CharKey> */}
           <RoundedButton
             onClick={() => onModeChanged(key)}
             selected={mode === key}
           >
-            {icon}
+            <div>{icon}</div>
+            <div>
+              <CharKey selected={mode === key}>{modeKeys[key]}</CharKey>
+            </div>
           </RoundedButton>
         </div>
       ))}
