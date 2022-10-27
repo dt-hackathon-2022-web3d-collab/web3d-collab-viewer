@@ -43,7 +43,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
   }, [selectedVariant]);
 
   return (
-    <div>
+    <div className="w-[15rem]">
       <div className="ml-2 mb-2">
         <Toggle
           direction={drawerOpen ? "in" : "out"}
