@@ -130,7 +130,7 @@ const Annotations = ({
     // quick toggle for the filters.  unsure about how these will work with current Ux
     const showFilters = false;
     return (
-      <div className="bg-yellow border border-red-500">
+      <div className="bg-yellow border">
         {showFilters && (
           <>
             <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
