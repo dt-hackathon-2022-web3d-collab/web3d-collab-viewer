@@ -1,15 +1,32 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 import VariantItem from "./VariantItem.jsx";
 
 import classNames from "classnames";
 
 import { DrawerToggle } from "../DrawerToggle";
+import { useGetAllAnnotations } from "../../queries/annotations/annotations-query.js";
 
 const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
   const [variantOptions, setVariantOptions] = useState([]);
   const [context, setContext] = useState();
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const { roomId: sessionId } = useParams();
+  const annotationsQuery = useGetAllAnnotations(sessionId);
+
+  const annotationCounts = {};
+  const annotationVariantIds =
+    annotationsQuery.data?.rows?.map(({ variantId }) => variantId) ?? [];
+
+  annotationVariantIds.forEach((id) => {
+    if (annotationCounts.hasOwnProperty(id)) {
+      annotationCounts[id] += 1;
+    } else {
+      annotationCounts[id] = 1;
+    }
+  });
 
   useEffect(() => {
     const setup = async () => {
@@ -72,6 +89,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
                     select();
                     onChange(id);
                   }}
+                  annotations={annotationCounts[id]}
                 />
               ))}
             </div>

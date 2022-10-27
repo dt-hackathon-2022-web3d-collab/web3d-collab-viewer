@@ -1,8 +1,14 @@
 import { useState } from "react";
 import classNames from "classnames";
 
-const VariantItem = ({ label, onClick }) => {
+const VariantItem = ({ label, onClick, annotations }) => {
   const [hovering, setHovering] = useState(false);
+
+  const annotationEl = annotations ? (
+    <div className="absolute bottom-0 right-0 rounded-full bg-green-700 w-1/2 h-1/2 text-center font-bold">
+      {annotations}
+    </div>
+  ) : null;
 
   return (
     <div
@@ -21,6 +27,7 @@ const VariantItem = ({ label, onClick }) => {
       >
         {label}
       </div>
+      {annotationEl}
     </div>
   );
 };
