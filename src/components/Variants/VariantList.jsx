@@ -18,7 +18,14 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
       setContext(context);
       setTimeout(() => {
         setVariantOptions(context.variantOptions ?? []);
-      }, 1000);
+
+        const firstVariant = context.variantOptions[0]?.options[0];
+        if (firstVariant) {
+          const { id, select } = firstVariant;
+          onChange(id);
+          select();
+        }
+      }, 1500);
     };
 
     setup();
