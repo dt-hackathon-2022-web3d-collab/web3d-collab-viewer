@@ -146,7 +146,12 @@ const Room = () => {
               vertex.
             </p>
           </div>
-          <canvas id="number" width="64" height="64"></canvas>
+          <canvas
+            id="number"
+            width="64"
+            height="64"
+            className="invisible"
+          ></canvas>
           <Viewer
             onLaserChanged={onLaserChanged}
             onOrbitChanged={onOrbitChanged}
