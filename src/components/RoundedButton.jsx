@@ -1,9 +1,13 @@
+import classNames from "classnames";
+
 export const RoundedButton = ({ children, onClick, selected }) => (
   <div
-    className={
-      (selected ? "bg-blue-900" : "bg-blue-600") +
-      " hover:bg-blue-800 cursor-pointer text-white rounded m-1 p-3"
-    }
+    className={classNames("cursor-pointer  rounded m-1 p-3", {
+      "bg-blue-900": selected,
+      transparent: !selected,
+      "text-white": selected,
+      "text-black": !selected,
+    })}
     onClick={onClick}
   >
     {children}

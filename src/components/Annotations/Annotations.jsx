@@ -31,7 +31,14 @@ const Annotations = ({
   const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
   const queryClient = useQueryClient();
 
-  const filteredAnnotations = annotations.filter((annotation) => {
+  console.log(annotations);
+  const singleAnnotation =
+    annotationId !== undefined
+      ? annotations.filter((annotation) => annotation.id === annotationId)
+      : annotations;
+
+  // monkey patching singleAnnotations into this one. :O
+  const filteredAnnotations = singleAnnotation.filter((annotation) => {
     if (selectedFilterIndex === 0) {
       return true;
     }
