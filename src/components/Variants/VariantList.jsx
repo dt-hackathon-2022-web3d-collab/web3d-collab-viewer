@@ -5,9 +5,12 @@ import { CaretLeft, CaretRight } from "phosphor-react";
 import classNames from "classnames";
 
 const Toggle = ({ direction, ...rest }) => (
-  <div className="w-10 h-10 border border-red-800" {...rest}>
-    {direction === "in" && <CaretLeft size={32} />}
-    {direction === "out" && <CaretRight size={32} />}
+  <div
+    className="w-10 h-10 bg-white rounded drop-shadow-md flex items-center justify-center"
+    {...rest}
+  >
+    {direction === "in" && <CaretLeft size={24} />}
+    {direction === "out" && <CaretRight size={24} />}
   </div>
 );
 
@@ -40,17 +43,19 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
   }, [selectedVariant]);
 
   return (
-    <>
-      <Toggle
-        direction={drawerOpen ? "in" : "out"}
-        onClick={() => setDrawerOpen(!drawerOpen)}
-      />
+    <div>
+      <div className="ml-2 mb-2">
+        <Toggle
+          direction={drawerOpen ? "in" : "out"}
+          onClick={() => setDrawerOpen(!drawerOpen)}
+        />
+      </div>
       <div
         id="VariantList"
         className={classNames(
-          "backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 transition-transform rounded",
+          "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform",
           {
-            "-translate-x-full": !drawerOpen,
+            "-translate-x-[22rem]": !drawerOpen,
             "translate-x-0": drawerOpen,
           }
         )}
@@ -74,7 +79,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
