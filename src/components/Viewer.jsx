@@ -24,6 +24,7 @@ const Viewer = ({
   annotations = [],
   onNewAnnotation,
   newAnnotation,
+  onCanceledAnnotation,
 }) => {
   const [{ viewer, context }, setState] = useState({
     context: null,
@@ -62,16 +63,21 @@ const Viewer = ({
 
   const setupAnnotations = () => {
     clearAnnotations();
-    annotations.forEach((annotation) => {
-      const ann = addAnnotationPoint(new THREE.Vector3());
+    annotations.forEach((annotation, index) => {
+      console.log(annotation.position);
+      const pos = !!annotation.position
+        ? new THREE.Vector3(annotation.position)
+        : new THREE.Vector3();
+      const ann = addAnnotationPoint(pos, index + 1);
       annotationPoints.push(ann);
     });
   };
 
   useEffect(() => {
     if (context) {
-      console.log(annotations.length);
-      setupAnnotations();
+      setTimeout(() => {
+        setupAnnotations();
+      }, 2000);
     }
   }, [annotations, context]);
 
@@ -79,11 +85,13 @@ const Viewer = ({
     if (!isAnnotationsEnabled) return;
 
     const listener = () => {
+      if (newAnnotationRef.current) return onCanceledAnnotation();
+
       const intersection = castRayFromCamera();
       if (intersection) {
         newAnnotationRef.current = addAnnotationPoint(
           intersection,
-          "new-annotation"
+          annotations.length + 1
         );
         onNewAnnotation(intersection);
       }
@@ -99,7 +107,7 @@ const Viewer = ({
     init();
   }, []);
 
-  function addAnnotationPoint(target) {
+  function addAnnotationPoint(target, number) {
     // Yeah, I know
     const numberCanvas = document.getElementById("number");
     const ctx = numberCanvas.getContext("2d");
@@ -124,7 +132,7 @@ const Viewer = ({
     ctx.font = "32px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(annotations.length, x, y);
+    ctx.fillText(number.toString(), x, y);
 
     let sprite;
     let spriteBehindObject;

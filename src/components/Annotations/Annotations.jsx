@@ -12,6 +12,7 @@ import { DrawerToggle } from "../DrawerToggle";
 import { ReplyItem } from "./ReplyItem";
 import classNames from "classnames";
 import { useCreateReply } from "../../queries/replies/replies-query";
+import { useEffect } from "react";
 import { useParams } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -200,6 +201,10 @@ const Annotations = ({
   );
 
   const [isOpen, setOpen] = useState(isAnotating || annotationId !== undefined);
+
+  useEffect(() => {
+    setOpen(isAnotating || annotationId !== undefined);
+  }, [isAnotating, annotationId]);
 
   return (
     <>
