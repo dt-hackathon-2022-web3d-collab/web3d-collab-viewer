@@ -35,7 +35,10 @@ const Participants = ({
           >
             <div
               className="rounded-full w-full h-full bg-black bg-cover"
-              style={{ backgroundImage: `url('${thumbImage}')` }}
+              style={{
+                backgroundImage: `url('${thumbImage}')`,
+                backgroundPosition: "center",
+              }}
             ></div>
           </div>
         </div>
