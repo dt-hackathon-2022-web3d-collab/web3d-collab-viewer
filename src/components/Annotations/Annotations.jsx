@@ -18,14 +18,21 @@ import { DrawerToggle } from "../DrawerToggle";
 
 const filters = ["All", "Unresolved", "Resolved"];
 
-const Annotations = ({ userId, participants, selectedVariant }) => {
+const Annotations = ({ userId, participants, isAnotating, annotationId }) => {
   const { roomId: sessionId } = useParams();
   const [selectedAnnotationId, setSelectedAnnotationId] = useState(null);
   const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
   const queryClient = useQueryClient();
   const annotationsQuery = useGetAllAnnotations(sessionId);
   const annotations = annotationsQuery.data?.rows ?? [];
-  const filteredAnnotations = annotations.filter((annotation) => {
+
+  const singleAnnotation =
+    annotationId !== undefined
+      ? annotations.filter((annotation) => annotation.id === annotationId)
+      : annotations;
+
+  // monkey patching singleAnnotations into this one. :O
+  const filteredAnnotations = singleAnnotation.filter((annotation) => {
     if (selectedFilterIndex === 0) {
       return true;
     }
@@ -36,6 +43,7 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
 
     return annotation.resolved;
   });
+
   const createAnnotation = useCreateAnnotation();
   const createReply = useCreateReply();
   const resolveAnnotation = useResolveAnnotation();
@@ -112,40 +120,48 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
     );
   };
 
-  const annotationsView = (
-    <>
-      <AnnotationTextInput onSubmit={handleAnnotation} />
-      <div className="flex flex-row justify-between items-center mb-2">
-        {filters.map((filter, index) => {
-          const filterSelected = selectedFilterIndex === index;
+  const AnnotationsView = ({ annotationId }) => {
+    // quick toggle for the filters.  unsure about how these will work with current Ux
+    const showFilters = false;
+    return (
+      <div className="bg-yellow border border-red-500">
+        {showFilters && (
+          <>
+            <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
+            <div className="flex flex-row justify-between items-center mb-2">
+              {filters.map((filter, index) => {
+                const filterSelected = selectedFilterIndex === index;
 
-          const handleClick = () => setSelectedFilterIndex(index);
+                const handleClick = () => setSelectedFilterIndex(index);
 
-          return (
-            <div
-              key={filter}
-              className={classNames(
-                "px-[4px] border border-black rounded-lg cursor-pointer",
-                {
-                  "bg-black/20": filterSelected,
-                }
-              )}
-              onClick={handleClick}
-            >
-              {filter}
+                return (
+                  <div
+                    key={filter}
+                    className={classNames(
+                      "px-[4px] border-[1px] border-black rounded-lg",
+                      {
+                        "bg-black/20": filterSelected,
+                      }
+                    )}
+                    onClick={handleClick}
+                  >
+                    {filter}
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          </>
+        )}
+        {filteredAnnotations.map((annotation, index) => (
+          <AnnotationItem
+            key={`annotation-${index}`}
+            {...annotation}
+            onClick={handleSelect}
+          />
+        ))}
       </div>
-      {filteredAnnotations.map((annotation, index) => (
-        <AnnotationItem
-          key={`annotation-${index}`}
-          {...annotation}
-          onClick={handleSelect}
-        />
-      ))}
-    </>
-  );
+    );
+  };
 
   const repliesView = (
     <>
@@ -178,14 +194,14 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
     </>
   );
 
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [isOpen, setOpen] = useState(isAnotating || annotationId !== undefined);
 
   return (
     <>
       <div id="" className="ml-2 mb-2 flex flex-row-reverse">
         <DrawerToggle
-          direction={drawerOpen ? "out" : "in"}
-          onClick={() => setDrawerOpen(!drawerOpen)}
+          direction={isOpen ? "in" : "out"}
+          onClick={() => setOpen(!isOpen)}
         />
       </div>
 
@@ -193,17 +209,31 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
         className={classNames(
           "h-full overflow-y-auto overflow-x-hidden transition-transform w-[250px]",
           {
-            "translate-x-[22rem]": !drawerOpen,
-            "translate-x-0": drawerOpen,
+            "translate-x-[22rem]": !isOpen,
+            "translate-x-0": isOpen,
           }
         )}
       >
         <div
           id="Annotation"
-          className="ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded"
+          className={classNames(
+            "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform",
+            {
+              "translate-x-[22rem]": !isOpen,
+              "translate-x-0": isOpen,
+            }
+          )}
         >
-          {!selected && annotationsView}
-          {selected && repliesView}
+          {isAnotating && (
+            <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
+          )}
+
+          {annotationId !== undefined && (
+            <>
+              {!selected && <AnnotationsView annotationId={annotationId} />}
+              {selected && repliesView}
+            </>
+          )}
         </div>
       </div>
     </>
