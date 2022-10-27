@@ -21,7 +21,6 @@ const Viewer = ({
   userColorHex,
   isPointing,
 }) => {
-  console.log(userColorHex);
   const [{ viewer, context }, setState] = useState({
     context: null,
     viewer: null,
@@ -239,7 +238,6 @@ const Viewer = ({
     if (!context) return;
     THREE = context.THREE;
     setupScene();
-    console.log(context);
   }, [context]);
 
   return (

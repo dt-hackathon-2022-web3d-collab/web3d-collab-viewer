@@ -52,8 +52,6 @@ const Room = () => {
     const userIndex = participants.findIndex(
       (participant) => participant.id === user?.id
     );
-    console.log(colourClassArray[userIndex % colourClassArray.length]);
-    // ✨
     return tailWindColorsHex[
       colourClassArray[userIndex % colourClassArray.length]?.substring(3)
     ];

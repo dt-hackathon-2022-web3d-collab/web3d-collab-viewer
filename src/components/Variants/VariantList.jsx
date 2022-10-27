@@ -49,10 +49,6 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
   }, []);
 
   useEffect(() => {
-    console.log("=>", variantOptions);
-  }, [variantOptions]);
-
-  useEffect(() => {
     if (!selectedVariant && !isFollowing) return;
 
     context.selectVariantById(selectedVariant);
