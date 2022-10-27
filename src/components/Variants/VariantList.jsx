@@ -48,7 +48,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
       <div
         id="VariantList"
         className={classNames(
-          "backdrop-blur-md bg-white/50 border border-white p-3 transition-transform",
+          "backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 transition-transform rounded",
           {
             "-translate-x-full": !drawerOpen,
             "translate-x-0": drawerOpen,
@@ -58,7 +58,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
         <h3 className="mb-6">Variants</h3>
         {variantOptions.map(({ name, options }) => (
           <div key={name} className="pb-4 bg-white-600/74">
-            <h4>{name}</h4>
+            <h4 className="lowercase first-letter:uppercase">{name}</h4>
             <div className="flex flex-wrap">
               {options.map(({ label, id, select }) => (
                 <VariantItem

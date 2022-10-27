@@ -13,7 +13,7 @@ const VariantItem = ({ label, onClick }) => {
     >
       <div
         className={classNames(
-          "absolute w-auto p-1 top-0 left-0 transform -translate-y-full bg-white border border-black z-20 whitespace-nowrap",
+          "absolute w-auto py-1 px-2 -top-2 left-0 transform -translate-y-full rounded bg-white drop-shadow-md lowercase first-letter:uppercase z-20 whitespace-nowrap",
           {
             hidden: !hovering,
           }
