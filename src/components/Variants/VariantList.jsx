@@ -59,7 +59,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
         {variantOptions.map(({ name, options }) => (
           <div key={name} className="pb-4 bg-white-600/74">
             <h4>{name}</h4>
-            <div className="grid grid-flow-col auto-cols-max gap-1 border border-red-800">
+            <div className="flex flex-wrap">
               {options.map(({ label, id, select }) => (
                 <VariantItem
                   key={id}
