@@ -11,6 +11,7 @@ import Viewer from "../components/Viewer.jsx";
 import { queryIds as annotationsQueryIds } from "../queries/annotations/annotations-query.js";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
 import { useState } from "react";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 
@@ -21,10 +22,15 @@ export const Context = createContext({ mode: "view" });
 const Room = () => {
   const { roomId } = useParams();
   const [user, setUser] = useState();
-  const [didJoin, setDidJoin] = useState(false);
   const [cameraTransform, setCameraTransform] = useState({});
   const [selectedVariant, setSelectedVariant] = useState();
-  const [selectedParticipant, setSelectedParticipant] = useState();
+  const [selectedParticipant, _setSelectedParticipant] = useState();
+
+  const selectedParticipantRef = useRef(selectedParticipant);
+  const setSelectedParticipant = data => {
+    selectedParticipantRef.current = data;
+    _setSelectedParticipant(data);
+  };
 
   const queryClient = useQueryClient();
   const { data } = useGetUsersInSession(roomId);
@@ -43,16 +49,17 @@ const Room = () => {
 
   const onSelectParticipant = (participant) => {
     if(participant.id === user?.id) return;
-    setSelectedParticipant(participant);
+      setSelectedParticipant(participant);
   };
 
   const onCameraUpdate = (cameraUpdate) => {
-    setCameraTransform(cameraUpdate.transform);
+    if(cameraUpdate.userId === selectedParticipantRef.current?.id)
+      setCameraTransform(cameraUpdate.transform);
   }
 
-
-  const onVariantUpdate = ({variant}) => {
-    setSelectedVariant(variant)
+  const onVariantUpdate = (variantUpdated) => {
+    if(variantUpdated.userId === selectedParticipantRef.current?.id)
+      setSelectedVariant(variantUpdated.variant);
   }
 
 const { joinUser, updateCamera, updateVariant } = useWebSocket({
