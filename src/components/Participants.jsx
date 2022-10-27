@@ -30,7 +30,9 @@ const Participants = ({
         onClick={() => onSelectParticipant(participant)}
       >
         <div className="flex flex-col items-center">
-          <div className={`m-1 p-1 ${colour} w-12 h-12 rounded-full`}>
+          <div
+            className={`m-1 p-1 ${colour} w-12 h-12 rounded-full drop-shadow-md`}
+          >
             <div
               className="rounded-full w-full h-full bg-black bg-cover"
               style={{ backgroundImage: `url('${thumbImage}')` }}
@@ -39,7 +41,9 @@ const Participants = ({
         </div>
         <div
           className={classNames(
-            `rounded-full truncate w-20 ${isSelected ? colour : ""}`,
+            `rounded-full drop-shadow-md  truncate w-20 ${
+              isSelected ? colour : ""
+            }`,
             {
               "text-white": isSelected,
               "font-bold": isMyself,
