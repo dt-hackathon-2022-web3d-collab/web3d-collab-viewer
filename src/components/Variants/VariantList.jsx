@@ -72,7 +72,6 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
           }
         )}
       >
-        <h3 className="mb-6">Variants</h3>
         {variantOptions.map(({ name, options }) => (
           <div key={name} className="pb-4 bg-white-600/74">
             <h4 className="lowercase first-letter:uppercase">{name}</h4>

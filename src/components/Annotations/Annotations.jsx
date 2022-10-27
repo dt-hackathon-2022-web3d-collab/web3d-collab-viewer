@@ -203,12 +203,12 @@ const Annotations = ({
 
   return (
     <>
-      <div id="" className="ml-2 mb-2 flex flex-row-reverse">
+      {/* <div id="" className="ml-2 mb-2 flex flex-row-reverse">
         <DrawerToggle
           direction={isOpen ? "out" : "in"}
           onClick={() => setOpen(!isOpen)}
         />
-      </div>
+      </div> */}
 
       <div
         className={classNames(
