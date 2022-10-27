@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} position="top-right" />
+      <ReactQueryDevtools initialIsOpen={false} position="top-right" toggleButtonProps={{ className: "opacity-0 hover:opacity-100"}} />
       <BrowserRouter>
         <App />
       </BrowserRouter>
