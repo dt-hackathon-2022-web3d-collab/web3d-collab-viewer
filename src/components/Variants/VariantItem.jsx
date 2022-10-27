@@ -1,7 +1,7 @@
 import { useState } from "react";
 import classNames from "classnames";
 
-const VariantItem = ({ label, onClick, annotations }) => {
+const VariantItem = ({ label, onClick, annotations, thumbImage }) => {
   const [hovering, setHovering] = useState(false);
 
   const annotationEl = annotations ? (
@@ -16,6 +16,10 @@ const VariantItem = ({ label, onClick, annotations }) => {
       onClick={onClick}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
+      style={{
+        backgroundImage: `url('${thumbImage}')`,
+        backgroundSize: "3rem",
+      }}
     >
       <div
         className={classNames(

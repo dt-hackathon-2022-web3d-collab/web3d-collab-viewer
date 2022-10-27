@@ -7,6 +7,7 @@ import classNames from "classnames";
 
 import { DrawerToggle } from "../DrawerToggle";
 import { useGetAllAnnotations } from "../../queries/annotations/annotations-query.js";
+import { variantsArray } from "../../constants/variants.js";
 
 const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
   const [variantOptions, setVariantOptions] = useState([]);
@@ -54,6 +55,8 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
     context.selectVariantById(selectedVariant);
   }, [selectedVariant]);
 
+  let imageIndex = 0;
+
   return (
     <div className="w-[15rem]">
       <div className="ml-2 mb-2">
@@ -85,6 +88,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
                     onChange(id);
                   }}
                   annotations={annotationCounts[id]}
+                  thumbImage={variantsArray[imageIndex++]}
                 />
               ))}
             </div>
