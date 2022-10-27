@@ -1,3 +1,4 @@
+import { colourClassArray, tailWindColorsHex } from "../constants/colours";
 import { createContext, useCallback } from "react";
 import { useGetUsersInSession, queryIds as usersQueryIds } from "../queries/users/users-query";
 
@@ -9,6 +10,7 @@ import Toolbar from "../components/Toolbar";
 import VariantList from "../components/Variants/VariantList.jsx";
 import Viewer from "../components/Viewer.jsx";
 import { queryIds as annotationsQueryIds } from "../queries/annotations/annotations-query.js";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
@@ -26,6 +28,8 @@ const Room = () => {
   const [selectedVariant, setSelectedVariant] = useState();
   const [selectedParticipant, _setSelectedParticipant] = useState();
 
+
+
   const selectedParticipantRef = useRef(selectedParticipant);
   const setSelectedParticipant = data => {
     selectedParticipantRef.current = data;
@@ -36,6 +40,13 @@ const Room = () => {
   const { data } = useGetUsersInSession(roomId);
 
   const participants = data?.rows ?? [];
+
+  const userColorHex = useMemo(() => {
+    const userIndex = participants.findIndex(participant => participant.id === user.id);
+  console.log(colourClassArray[userIndex % colourClassArray.length])
+    // ✨
+    return tailWindColorsHex[colourClassArray[userIndex % colourClassArray.length]]
+  }, [user])
 
   const onParticipantsUpdate = () => {
     queryClient.invalidateQueries(usersQueryIds.useGetUsersInSession(roomId));
@@ -100,7 +111,12 @@ const { joinUser, updateCamera, updateVariant } = useWebSocket({
       <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 absolute">
         <NameModal onSubmit={onSubmitName} />
         <div className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0" onClick={() => setSelectedParticipant()}>
-          <Viewer onOrbitChanged={onOrbitChanged} cameraTransform={cameraTransform} isFollowing={!!selectedParticipant} />
+        <div className="annotation">
+            <p><strong>Cube</strong></p>
+            <p>In geometry, a cube is a three-dimensional solid object bounded by six square faces, facets or sides, with three meeting at each vertex.</p>
+        </div>
+        <canvas id="number" width="64" height="64"></canvas>
+          <Viewer onOrbitChanged={onOrbitChanged} cameraTransform={cameraTransform} isFollowing={!!selectedParticipant} isRaycastEnabled={true} onRaycastHit={() => {}} userColorHex={userColorHex} />
         </div>
         <div className="w-full text-center absolute top-0 left-0">
           <Participants participants={participants} onSelectParticipant={onSelectParticipant} selectedParticipant={selectedParticipant} />
