@@ -13,6 +13,7 @@ import { useCreateReply } from "../../queries/replies/replies-query";
 import { AnnotationItem } from "./AnnotationItem";
 import { AnnotationTextInput } from "./AnnotationTextInput";
 import { ReplyItem } from "./ReplyItem";
+import classNames from "classnames";
 
 const filters = ["All", "Unresolved", "Resolved"];
 
@@ -115,16 +116,21 @@ const Annotations = ({ userId, participants }) => {
       <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
       <div className="flex flex-row justify-between items-center mb-2">
         {filters.map((filter, index) => {
-          const commonClassName =
-            "px-[4px] border-[1px] border-black rounded-lg";
-          const className =
-            selectedFilterIndex === index
-              ? `${commonClassName} bg-black/20`
-              : commonClassName;
+          const filterSelected = selectedFilterIndex === index;
+
           const handleClick = () => setSelectedFilterIndex(index);
 
           return (
-            <div key={filter} className={className} onClick={handleClick}>
+            <div
+              key={filter}
+              className={classNames(
+                "px-[4px] border-[1px] border-black rounded-lg",
+                {
+                  "bg-black/20": filterSelected,
+                }
+              )}
+              onClick={handleClick}
+            >
               {filter}
             </div>
           );

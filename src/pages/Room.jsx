@@ -117,7 +117,7 @@ const Room = () => {
           className="w-full h-full flex justify-center items-center absolute top-0 left-0 z-0"
           onClick={() => setSelectedParticipant()}
         >
-          <div className="annotation">
+          <div className="annotation invisible">
             <p>
               <strong>Cube</strong>
             </p>
