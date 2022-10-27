@@ -1,14 +1,8 @@
 import { PaperPlaneRight } from "phosphor-react";
 
-export const AnnotationTextInput = ({ label, onSubmit }) => {
+export const AnnotationTextInput = ({ onSubmit }) => {
   return (
     <form onSubmit={onSubmit}>
-      <label
-        htmlFor="text-input"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-      >
-        {label}
-      </label>
       <div className="flex flex-row">
         <input
           id="text-input"

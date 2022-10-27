@@ -7,7 +7,7 @@ export const AnnotationItem = ({ onClick, ...annotation }) => {
 
   return (
     <div
-      className="bg-black/10 mb-2 rounded border border-white"
+      className="bg-black/10 mb-2 rounded border border-white px-2"
       onClick={handleOnClick}
     >
       {resolved && <del>{message}</del>}

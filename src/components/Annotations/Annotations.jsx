@@ -114,7 +114,7 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
 
   const annotationsView = (
     <>
-      <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
+      <AnnotationTextInput onSubmit={handleAnnotation} />
       <div className="flex flex-row justify-between items-center mb-2">
         {filters.map((filter, index) => {
           const filterSelected = selectedFilterIndex === index;
@@ -184,7 +184,7 @@ const Annotations = ({ userId, participants, selectedVariant }) => {
     <>
       <div id="" className="ml-2 mb-2 flex flex-row-reverse">
         <DrawerToggle
-          direction={drawerOpen ? "in" : "out"}
+          direction={drawerOpen ? "out" : "in"}
           onClick={() => setDrawerOpen(!drawerOpen)}
         />
       </div>
