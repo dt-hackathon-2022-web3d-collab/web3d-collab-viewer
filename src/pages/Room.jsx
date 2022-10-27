@@ -1,8 +1,8 @@
 import { colourClassArray, tailWindColorsHex } from "../constants/colours";
-import { createContext, useCallback } from "react";
+import { createContext, useCallback, useMemo, useRef, useState } from "react";
 import {
-  useGetUsersInSession,
   queryIds as usersQueryIds,
+  useGetUsersInSession,
 } from "../queries/users/users-query";
 
 import Annotations from "../components/Annotations/Annotations.jsx";
@@ -12,17 +12,15 @@ import ShareRoom from "../components/ShareRoom";
 import Toolbar from "../components/Toolbar";
 import VariantList from "../components/Variants/VariantList.jsx";
 import Viewer from "../components/Viewer.jsx";
+import modes from "../constants/modes.js";
 import { queryIds as annotationsQueryIds } from "../queries/annotations/annotations-query.js";
-import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
-import { useState } from "react";
 import { useWebSocket } from "../hooks/useWebSocket/useWebSocket";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
-export const Context = createContext({ mode: "view" });
+export const Context = createContext({ mode: modes.view });
 
 const Room = () => {
   const { roomId } = useParams();
@@ -101,7 +99,7 @@ const Room = () => {
     updateVariant(variant);
   };
 
-  const [mode, setMode] = useState("view");
+  const [mode, setMode] = useState(modes.view);
 
   const onModeChanged = useCallback(
     (mode) => {
@@ -135,7 +133,7 @@ const Room = () => {
             cameraTransform={cameraTransform}
             isFollowing={!!selectedParticipant}
             onAnnotation={(point) => console.log(`Annotating at ${point}`)}
-            isAnnotationsEnabled={mode === "annotate"}
+            isAnnotationsEnabled={mode === modes.annotate}
             userColorHex={userColorHex}
           />
         </div>
