@@ -7,34 +7,28 @@ let raycaster;
 let pointer;
 const annotations = [];
 
-const Viewer = ({cameraTransform, isFollowing, onOrbitChanged, onRaycastHit, isRaycastEnabled, userColorHex }) => {
+const Viewer = ({cameraTransform, isFollowing, onOrbitChanged, onAnnotation, isAnnotationsEnabled, userColorHex }) => {
     const [{viewer, context}, setState] = useState({
       context: null, viewer: null,
     });
     
     function onPointerMove( event ) {
-      if(!isRaycastEnabled) return;
-      
       pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
       pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     }
 
     function castRayFromCamera () {
-      if(!isRaycastEnabled) return;
-
       raycaster.setFromCamera( pointer, context.mainCameraComponent._cam );
 
       const intersects = raycaster.intersectObjects( context.scene.children );
 
       for ( let i = 0; i < intersects.length; i ++ ) {
-        onRaycastHit(intersects[ i ]);
-        console.log(intersects[ i ]);
-        addAnnotationPoint(intersects[ i ].point);
-        break;
+         return intersects[ i ].point
       }
     }
 
     function addAnnotationPoint (target) {
+      // Yeah, I know
       const numberCanvas = document.getElementById("number");
       const ctx = numberCanvas.getContext("2d");
       const x = 32;
@@ -94,7 +88,24 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged, onRaycastHit, isR
       annotation.style.top = `${vector.y}px`;
       annotation.style.left = `${vector.x}px`;
       annotation.style.opacity = spriteBehindObject ? 0.25 : 1;
+
+      if(onAnnotation) onAnnotation(target);
     }
+
+
+    useEffect(() => {
+      if(!isAnnotationsEnabled) return; 
+
+      const clickListener = viewer.addEventListener('click', () => {
+        const intersection = castRayFromCamera();
+        if(intersection) addAnnotationPoint(intersection);
+      });
+
+      return () => {
+        if(!isAnnotationsEnabled && clickListener)
+          viewer.removeListener('click', clickListener); 
+      }
+    }, [isAnnotationsEnabled]);
     
 
    useEffect(() => {
@@ -131,7 +142,7 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged, onRaycastHit, isR
 
     function setupCamera () {
       const orbitControls =  context.mainCameraComponent.gameObject.getComponent('OrbitControls');
-      orbitControls.middleClickToFocus = false;
+      orbitControls.doubleClickToFocus = false;
 
       orbitControls.controls.addEventListener('change', (change) => {
         if(onOrbitChanged)
@@ -149,7 +160,6 @@ const Viewer = ({cameraTransform, isFollowing, onOrbitChanged, onRaycastHit, isR
     function setupListeners () {
       pointer = new THREE.Vector2();
       window.addEventListener( 'pointermove', onPointerMove );
-      viewer.addEventListener('click', castRayFromCamera);
     }
 
     function setupScene () {
