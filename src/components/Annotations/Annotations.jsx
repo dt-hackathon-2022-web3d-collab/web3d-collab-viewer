@@ -200,7 +200,7 @@ const Annotations = ({ userId, participants, isAnotating, annotationId }) => {
     <>
       <div id="" className="ml-2 mb-2 flex flex-row-reverse">
         <DrawerToggle
-          direction={isOpen ? "in" : "out"}
+          direction={isOpen ? "out" : "in"}
           onClick={() => setOpen(!isOpen)}
         />
       </div>
