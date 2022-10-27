@@ -1,9 +1,9 @@
 const VariantItem = ({ label, onClick }) => (
   <div
-    className="bg-sky-300 mb-0.5 px-1 rounded border border-solid border-black cursor-pointer"
+    className="bg-sky-300 relative w-10 h-10 mb-0.5 px-1 rounded-full cursor-pointer relative"
     onClick={onClick}
   >
-    {label}
+    <div className="absolute">{label}</div>
   </div>
 );
 
