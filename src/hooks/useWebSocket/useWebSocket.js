@@ -1,28 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 
 import io from "socket.io-client";
-import { usePersistentContext } from "../usePersistentContext/usePersistentContext";
 
 const url = import.meta.env.VITE_SOCKET_URL;
 
 const socket = io(url);
 
-export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate, onVariantUpdate, onAnnotationsUpdate }) => {
+export const useWebSocket = ({
+  onParticipantsUpdate,
+  onCameraUpdate,
+  onVariantUpdate,
+  onAnnotationsUpdate,
+}) => {
   const [isConnected, setIsConnected] = useState();
 
-  const [user, setUser] = usePersistentContext("user");
-
   useEffect(() => {
-    if(isConnected) return;
-    
-    socket.on('connect', () => {
+    if (isConnected) return;
+
+    socket.on("connect", () => {
       setIsConnected(true);
     });
 
-    socket.on('disconnect', () => {
-      console.log('disconnected')
+    socket.on("disconnect", () => {
+      console.log("disconnected");
       setIsConnected(false);
-      setUser(null);
     });
 
     socket.on("ping", () => {
@@ -40,15 +41,15 @@ export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate, onVariantUp
     });
 
     socket.on("camera-updated", (transform) => {
-      if(onCameraUpdate) {
+      if (onCameraUpdate) {
         onCameraUpdate(transform);
-      };
-    })
+      }
+    });
 
     socket.on("variant-updated", (variant) => {
-      if(onVariantUpdate) {
+      if (onVariantUpdate) {
         onVariantUpdate(variant);
-      };
+      }
     });
 
     socket.on("annotations", () => {
@@ -79,14 +80,14 @@ export const useWebSocket = ({ onParticipantsUpdate, onCameraUpdate, onVariantUp
         resolve
       );
     });
-  
-    const updateCamera = (transform) => {
-      socket.emit("camera-transform", transform);
-    }
 
-    const updateVariant = (variantId) => {
-      socket.emit("variant-change", variantId);
-    }
+  const updateCamera = (transform) => {
+    socket.emit("camera-transform", transform);
+  };
+
+  const updateVariant = (variantId) => {
+    socket.emit("variant-change", variantId);
+  };
 
   return {
     joinUser,
