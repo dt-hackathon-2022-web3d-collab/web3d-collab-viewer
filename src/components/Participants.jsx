@@ -1,17 +1,11 @@
-import { useState, useContext } from "react";
-import { colourClassArray } from "../constants/colours";
-import { avatarArray } from "../constants/avatars";
-import { useEffect } from "react";
+import { useContext, useState } from "react";
+
 import { Context } from "../pages/Room";
+import { avatarArray } from "../constants/avatars";
+import { colourClassArray } from "../constants/colours";
 
-const Participants = ({ participants }) => {
+const Participants = ({ participants, onSelectParticipant, selectedParticipant }) => {
   const { user } = useContext(Context);
-  const [following, setFollowing] = useState(null);
-
-  useEffect(() => {
-    const participant = participants[following];
-    console.log("following", participant);
-  }, [following]);
 
   return participants.map((participant, index) => {
     const colourIndex = index % colourClassArray.length;
@@ -31,9 +25,9 @@ const Participants = ({ participants }) => {
       <div
         key={`participant-${index}`}
         className="inline-block"
-        onClick={() => setFollowing(index)}
+        onClick={() => onSelectParticipant(participant)}
       >
-        <div className={following === index ? `bg-yellow-200` : ``}>
+        <div className={selectedParticipant?.id === participant.id ? `bg-yellow-200` : ``}>
           <div className={`p-2 m-1 ${colour} rounded-full w-20`}>
             <div
               className="rounded-full bg-black w-16 h-16 bg-cover"
@@ -41,7 +35,7 @@ const Participants = ({ participants }) => {
             ></div>
           </div>
           <div className="font-bold truncate w-20" title={participant.name}>
-            {participant.id === user.id && <span>*</span>}
+            {participant.id === user?.id && <span>*</span>}
             {participant.name}
           </div>
         </div>
