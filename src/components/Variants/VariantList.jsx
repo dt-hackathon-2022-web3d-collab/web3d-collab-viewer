@@ -75,10 +75,10 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
           }
         )}
       >
-        {variantOptions.map(({ name, options }) => (
+        {variantOptions.map(({ name, options }, index) => (
           <div key={name} className="pb-4 bg-white-600/74">
             <h4 className="lowercase first-letter:uppercase">{name}</h4>
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap mt-4 ">
               {options.map(({ label, id, select }) => (
                 <VariantItem
                   key={id}
@@ -92,6 +92,9 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
                 />
               ))}
             </div>
+            {index !== variantOptions.length - 1 && (
+              <div className="border border-white/35 w-full mt-4" />
+            )}
           </div>
         ))}
       </div>

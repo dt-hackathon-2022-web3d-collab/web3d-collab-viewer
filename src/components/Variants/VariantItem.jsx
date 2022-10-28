@@ -12,7 +12,7 @@ const VariantItem = ({ label, onClick, annotations, thumbImage }) => {
 
   return (
     <div
-      className="bg-sky-300 relative w-10 h-10 mb-1 mr-1 rounded-full cursor-pointer relative"
+      className="bg-sky-300 relative w-10 h-10 mb-2 mr-2 rounded-full cursor-pointer relative"
       onClick={onClick}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
