@@ -42,6 +42,8 @@ const Room = () => {
     _setSelectedParticipant(data);
   };
 
+  const [annotationsByVariant, setAnnotationsByVariant] = useState([]);
+
   const currentUserRef = useRef(user);
   const setUser = (data) => {
     currentUserRef.current = data;
@@ -55,6 +57,14 @@ const Room = () => {
   const annotations = annotationsQuery.data?.rows ?? [];
 
   const participants = data?.rows ?? [];
+
+  useEffect(() => {
+    setAnnotationsByVariant(
+      annotations.filter(
+        (annotation) => annotation.variantId === selectedVariant
+      )
+    );
+  }, [annotations, selectedVariant]);
 
   const userColorHex = useMemo(() => {
     const userIndex = participants.findIndex(
@@ -182,7 +192,7 @@ const Room = () => {
             onCanceledAnnotation={onCancelNewAnnotation}
             newAnnotation={newAnnotation}
             isAnnotationsEnabled={mode === modes.annotate}
-            annotations={annotations}
+            annotations={annotationsByVariant}
             userColorHex={userColorHex}
             isPointing={mode === modes.point}
           />
@@ -197,8 +207,11 @@ const Room = () => {
         <div>
           <div className="absolute right-2 top-1/4 bottom-1/4 z-10 overflow-hidden">
             <Annotations
-              annotations={annotations}
+              annotations={annotationsByVariant}
               isAnotating={isAnnotationsOpen}
+              newAnnotation={newAnnotation}
+              onSubmitAnnotation={onCancelNewAnnotation}
+              selectedVariant={selectedVariant}
               // annotationId={"c207c8e0-a62d-446e-8555-99eebd421c19"}
               userId={user?.id}
               participants={participants}

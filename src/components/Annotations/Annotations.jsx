@@ -26,6 +26,8 @@ const Annotations = ({
   selectedVariant,
   isAnotating,
   annotationId,
+  newAnnotation,
+  onSubmitAnnotation,
 }) => {
   const { roomId: sessionId } = useParams();
   const [selectedAnnotationId, setSelectedAnnotationId] = useState(null);
@@ -79,7 +81,12 @@ const Annotations = ({
 
     button.disabled = true;
     input.disabled = true;
-    const body = { message, userId, position: 0, variantId: selectedVariant };
+    const body = {
+      message,
+      userId,
+      position: JSON.stringify(newAnnotation.position),
+      variantId: selectedVariant,
+    };
     await createAnnotation.mutateAsync({ sessionId, body });
     queryClient.invalidateQueries(
       annotationQueryIds.useGetAllAnnotations(sessionId)
@@ -87,6 +94,8 @@ const Annotations = ({
     button.disabled = false;
     input.disabled = false;
     input.value = "";
+
+    onSubmitAnnotation();
   };
 
   const handleReply = async (event) => {

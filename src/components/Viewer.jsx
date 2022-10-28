@@ -64,20 +64,22 @@ const Viewer = ({
   const setupAnnotations = () => {
     clearAnnotations();
     annotations.forEach((annotation, index) => {
-      console.log(annotation.position);
-      const pos = !!annotation.position
-        ? new THREE.Vector3(annotation.position)
-        : new THREE.Vector3();
+      console.log(index);
+      let pos;
+      try {
+        pos = JSON.parse(annotation.position);
+      } catch (e) {
+        pos = new THREE.Vector3();
+      }
+
       const ann = addAnnotationPoint(pos, index + 1);
       annotationPoints.push(ann);
     });
   };
 
   useEffect(() => {
-    if (context) {
-      setTimeout(() => {
-        setupAnnotations();
-      }, 2000);
+    if (context?.scene && annotations) {
+      setupAnnotations();
     }
   }, [annotations, context]);
 
@@ -109,7 +111,10 @@ const Viewer = ({
 
   function addAnnotationPoint(target, number) {
     // Yeah, I know
-    const numberCanvas = document.getElementById("number");
+    const numberCanvas = document.createElement("canvas");
+    numberCanvas.width = 64;
+    numberCanvas.height = 64;
+
     const ctx = numberCanvas.getContext("2d");
     const x = 32;
     const y = 32;
@@ -132,15 +137,13 @@ const Viewer = ({
     ctx.font = "32px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(number.toString(), x, y);
+    ctx.fillText(number, x, y);
 
     let sprite;
     let spriteBehindObject;
     const annotation = document.querySelector(".annotation");
 
-    const numberTexture = new THREE.CanvasTexture(
-      document.querySelector("#number")
-    );
+    const numberTexture = new THREE.CanvasTexture(numberCanvas);
 
     const spriteMaterial = new THREE.SpriteMaterial({
       map: numberTexture,

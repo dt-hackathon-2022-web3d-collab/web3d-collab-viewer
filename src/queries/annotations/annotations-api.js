@@ -11,9 +11,12 @@ export const createAnnotation = async ({ sessionId, body }) => {
 };
 
 export const getAllAnnotations = async ({ sessionId }) => {
-  const response = await fetch(`${url}/v1/sessions/${sessionId}/annotations`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `${url}/v1/sessions/${sessionId}/annotations?count=1000`,
+    {
+      method: "GET",
+    }
+  );
 
   return response.json();
 };
