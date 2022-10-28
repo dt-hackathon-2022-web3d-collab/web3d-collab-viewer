@@ -6,12 +6,15 @@ export default () => {
   const { roomId } = useParams();
 
   const handleClick = () => {
-    navigator.clipboard.writeText(`${window.location.host}/rooms/${roomId}`);
+    const shareUrl = `${window.location.host}/rooms/${roomId}`;
+    navigator.clipboard.writeText(shareUrl);
   };
 
   return (
-    <RoundedButton onClick={handleClick}>
-      <Clipboard size={32} />
-    </RoundedButton>
+    <div className="rounded backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white">
+      <RoundedButton onClick={handleClick}>
+        <Clipboard size={32} />
+      </RoundedButton>
+    </div>
   );
 };

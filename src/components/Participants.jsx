@@ -31,7 +31,7 @@ const Participants = ({
       >
         <div className="flex flex-col items-center">
           <div
-            className={`m-1 p-1 ${colour} w-12 h-12 rounded-full drop-shadow-md`}
+            className={`m-2 p-1 ${colour} w-12 h-12 rounded-full drop-shadow-md`}
           >
             <div
               className="rounded-full w-full h-full bg-black bg-cover"
@@ -44,12 +44,10 @@ const Participants = ({
         </div>
         <div
           className={classNames(
-            `rounded-full drop-shadow-md  truncate w-20 ${
-              isSelected ? colour : ""
-            }`,
+            `rounded drop-shadow-md  truncate w-20 ${isSelected ? colour : ""}`,
             {
+              "border border-white/75": isMyself,
               "text-white": isSelected,
-              "font-bold": isMyself,
             }
           )}
           title={participant.name}

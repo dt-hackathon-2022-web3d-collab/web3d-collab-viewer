@@ -228,7 +228,7 @@ const Room = () => {
         <div className="absolute bottom-3 left-3 z-10">
           <Toolbar mode={mode} onModeChanged={onModeChanged} />
         </div>
-        <div className="absolute bottom-2 right-2 z-10">
+        <div className="absolute bottom-3 right-3 z-10">
           <ShareRoom />
         </div>
       </div>
