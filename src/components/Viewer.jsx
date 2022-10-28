@@ -43,10 +43,7 @@ const Viewer = ({
     raycaster.setFromCamera(pointer, context.mainCameraComponent._cam);
 
     const intersects = raycaster.intersectObjects(context.scene.children);
-
-    for (let i = 0; i < intersects.length; i++) {
-      return intersects[i];
-    }
+    return intersects;
   }
 
   useEffect(() => {
@@ -91,21 +88,21 @@ const Viewer = ({
 
       const intersects = castRayFromCamera();
 
-      if (!intersects) return;
+      if (!intersects.length) return;
 
-      const { point, object } = intersects;
-
-      if (object && object.type === "Sprite") {
-        onClickAnnotation(object.position);
-        return;
-      }
-
-      if (point && isAnnotationsEnabled) {
+      if (intersects[0] && isAnnotationsEnabled) {
         newAnnotationRef.current = addAnnotationPoint(
-          point,
+          intersects[0].point,
           annotations.length + 1
         );
-        onNewAnnotation(point);
+        onNewAnnotation(intersects[0].point);
+      }
+
+      for (let i = 0; i < intersects.length; i++) {
+        if (intersects[i].object?.type === "Sprite") {
+          onClickAnnotation(intersects[i].object.position);
+          return;
+        }
       }
     };
 
