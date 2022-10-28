@@ -236,7 +236,7 @@ const Annotations = ({
         <div
           id="Annotation"
           className={classNames(
-            "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform",
+            "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform pointer-events-auto",
             {
               "translate-x-[22rem]": !isOpen,
               "translate-x-0": isOpen,

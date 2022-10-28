@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-
-import VariantItem from "./VariantItem.jsx";
-
-import classNames from "classnames";
 
 import { DrawerToggle } from "../DrawerToggle";
+import VariantItem from "./VariantItem.jsx";
+import classNames from "classnames";
 import { useGetAllAnnotations } from "../../queries/annotations/annotations-query.js";
+import { useParams } from "react-router";
 import { variantsArray } from "../../constants/variants.js";
 
 const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
@@ -68,7 +66,7 @@ const VariantList = ({ onChange, selectedVariant, isFollowing }) => {
       <div
         id="VariantList"
         className={classNames(
-          "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform",
+          "ml-2 backdrop-blur-sm bg-white/50 drop-shadow-lg border border-white p-3 rounded transition-transform pointer-events-auto",
           {
             "-translate-x-[22rem]": !drawerOpen,
             "translate-x-0": drawerOpen,
