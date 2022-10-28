@@ -11,6 +11,7 @@ import {
 
 import Annotations from "../components/Annotations/Annotations.jsx";
 import AnnotationsModal from "../components/Annotations/AnnotationsModal";
+import { CopySimple } from "phosphor-react";
 import NameModal from "../components/NameModal.jsx";
 import Participants from "../components/Participants";
 import ShareRoom from "../components/ShareRoom";
@@ -36,18 +37,24 @@ const Room = () => {
   const [laser, setLaser] = useState(null);
   const [isAnnotationsOpen, setIsAnnotationsOpen] = useState();
   const [newAnnotation, setNewAnnotation] = useState();
+  const [selectedAnnotation, setSelectedAnnotation] = useState();
   const selectedParticipantRef = useRef(selectedParticipant);
   const setSelectedParticipant = (data) => {
     selectedParticipantRef.current = data;
     _setSelectedParticipant(data);
   };
 
-  const [annotationsByVariant, setAnnotationsByVariant] = useState([]);
-
   const currentUserRef = useRef(user);
   const setUser = (data) => {
     currentUserRef.current = data;
     _setUser(data);
+  };
+
+  const [annotationsByVariant, _setAnnotationsByVariant] = useState();
+  const annotationsByVariantRef = useRef([]);
+  const setAnnotationsByVariant = (data) => {
+    annotationsByVariantRef.current = data;
+    _setAnnotationsByVariant(data);
   };
 
   const queryClient = useQueryClient();
@@ -59,11 +66,10 @@ const Room = () => {
   const participants = data?.rows ?? [];
 
   useEffect(() => {
-    setAnnotationsByVariant(
-      annotations.filter(
-        (annotation) => annotation.variantId === selectedVariant
-      )
+    const ann = annotations.filter(
+      (annotation) => annotation.variantId === selectedVariant
     );
+    setAnnotationsByVariant(ann);
   }, [annotations, selectedVariant]);
 
   const userColorHex = useMemo(() => {
@@ -131,6 +137,7 @@ const Room = () => {
   const onVariantChanged = (variant) => {
     updateVariant(variant);
     setSelectedVariant(variant);
+    setSelectedAnnotation();
   };
 
   const onLaserChanged = (laserPointed) => {
@@ -156,6 +163,23 @@ const Room = () => {
       position: point,
     });
     setIsAnnotationsOpen(true);
+  };
+
+  const handleAnnotationClicked = (position) => {
+    const selected = annotationsByVariantRef.current.filter((annotation) => {
+      console.log(annotation);
+      let pos;
+      try {
+        pos = JSON.parse(annotation.position);
+      } catch (e) {}
+
+      console.log({ ann: annotation.position, position });
+      return (
+        pos.x === position.x && pos.y === position.y && pos.z === position.z
+      );
+    });
+
+    if (selected.length > 0) setSelectedAnnotation(selected[0].id);
   };
 
   return (
@@ -195,6 +219,7 @@ const Room = () => {
             annotations={annotationsByVariant}
             userColorHex={userColorHex}
             isPointing={mode === modes.point}
+            onClickAnnotation={handleAnnotationClicked}
           />
         </div>
         <div className="w-full text-center absolute top-3 left-0">
@@ -212,7 +237,7 @@ const Room = () => {
               newAnnotation={newAnnotation}
               onSubmitAnnotation={onCancelNewAnnotation}
               selectedVariant={selectedVariant}
-              // annotationId={"c207c8e0-a62d-446e-8555-99eebd421c19"}
+              annotationId={selectedAnnotation}
               userId={user?.id}
               participants={participants}
             />

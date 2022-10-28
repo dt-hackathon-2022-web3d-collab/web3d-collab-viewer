@@ -25,6 +25,7 @@ const Viewer = ({
   onNewAnnotation,
   newAnnotation,
   onCanceledAnnotation,
+  onClickAnnotation,
 }) => {
   const [{ viewer, context }, setState] = useState({
     context: null,
@@ -44,7 +45,7 @@ const Viewer = ({
     const intersects = raycaster.intersectObjects(context.scene.children);
 
     for (let i = 0; i < intersects.length; i++) {
-      return intersects[i].point;
+      return intersects[i];
     }
   }
 
@@ -64,7 +65,6 @@ const Viewer = ({
   const setupAnnotations = () => {
     clearAnnotations();
     annotations.forEach((annotation, index) => {
-      console.log(index);
       let pos;
       try {
         pos = JSON.parse(annotation.position);
@@ -84,26 +84,37 @@ const Viewer = ({
   }, [annotations, context]);
 
   useEffect(() => {
-    if (!isAnnotationsEnabled) return;
+    if (!viewer) return;
 
     const listener = () => {
       if (newAnnotationRef.current) return onCanceledAnnotation();
 
-      const intersection = castRayFromCamera();
-      if (intersection) {
+      const intersects = castRayFromCamera();
+
+      if (!intersects) return;
+
+      const { point, object } = intersects;
+
+      if (object && object.type === "Sprite") {
+        onClickAnnotation(object.position);
+        return;
+      }
+
+      if (point && isAnnotationsEnabled) {
         newAnnotationRef.current = addAnnotationPoint(
-          intersection,
+          point,
           annotations.length + 1
         );
-        onNewAnnotation(intersection);
+        onNewAnnotation(point);
       }
     };
+
     viewer.addEventListener("click", listener);
 
     return () => {
       viewer.removeEventListener("click", listener);
     };
-  }, [isAnnotationsEnabled]);
+  }, [isAnnotationsEnabled, viewer]);
 
   useEffect(() => {
     init();
@@ -122,12 +133,12 @@ const Viewer = ({
     const startAngle = 0;
     const endAngle = Math.PI * 2;
 
-    ctx.fillStyle = userColorHex || "rgb(0, 0, 0)";
+    ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.beginPath();
     ctx.arc(x, y, radius, startAngle, endAngle);
     ctx.fill();
 
-    ctx.strokeStyle = "rgb(255, 255, 255)";
+    ctx.strokeStyle = userColorHex || "rgb(255, 255, 255)";
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.arc(x, y, radius, startAngle, endAngle);
