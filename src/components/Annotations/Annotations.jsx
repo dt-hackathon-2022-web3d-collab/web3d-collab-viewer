@@ -139,7 +139,7 @@ const Annotations = ({
     // quick toggle for the filters.  unsure about how these will work with current Ux
     const showFilters = false;
     return (
-      <div className="bg-yellow border">
+      <div>
         {showFilters && (
           <>
             <AnnotationTextInput label="Annotate" onSubmit={handleAnnotation} />
@@ -189,8 +189,10 @@ const Annotations = ({
           {selected?.resolved ? <XCircle /> : <CheckCircle />}
         </div>
       </div>
-      <AnnotationItem {...selected} />
-      <div className="ml-2">
+      <div className="mb-5">
+        <AnnotationItem {...selected} />
+      </div>
+      <div className="ml-2 mb-6">
         {selected?.replies.map((reply, index) => {
           const user = participants.find(
             (participant) => participant.id === reply.userId

@@ -47,7 +47,6 @@ const Participants = ({
           className={classNames(
             `rounded drop-shadow-md  truncate w-20 ${isSelected ? colour : ""}`,
             {
-              "border border-white/75": isMyself,
               "text-white": isSelected,
             }
           )}
