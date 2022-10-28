@@ -167,7 +167,6 @@ const Room = () => {
 
   const handleAnnotationClicked = (position) => {
     const selected = annotationsByVariantRef.current.filter((annotation) => {
-      console.log(annotation);
       let pos;
       try {
         pos = JSON.parse(annotation.position);
