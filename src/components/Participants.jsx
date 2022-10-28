@@ -13,7 +13,8 @@ const Participants = ({
 
   return participants.map((participant, index) => {
     const colourIndex = index % colourClassArray.length;
-    const avatarIndex = index % avatarArray.length;
+    const avatarIndex =
+      Number.parseInt(participant.id.substring(0, 5), 32) % avatarArray.length;
     const colour = colourClassArray[colourIndex];
     const thumbImage = avatarArray[avatarIndex];
     const isSelected = selectedParticipant?.id === participant.id;
@@ -31,7 +32,7 @@ const Participants = ({
       >
         <div className="flex flex-col items-center">
           <div
-            className={`m-1 p-1 ${colour} w-12 h-12 rounded-full drop-shadow-md`}
+            className={`m-2 p-1 ${colour} w-12 h-12 rounded-full drop-shadow-md`}
           >
             <div
               className="rounded-full w-full h-full bg-black bg-cover"
@@ -44,12 +45,10 @@ const Participants = ({
         </div>
         <div
           className={classNames(
-            `rounded-full drop-shadow-md  truncate w-20 ${
-              isSelected ? colour : ""
-            }`,
+            `rounded drop-shadow-md  truncate w-20 ${isSelected ? colour : ""}`,
             {
+              "border border-white/75": isMyself,
               "text-white": isSelected,
-              "font-bold": isMyself,
             }
           )}
           title={participant.name}
