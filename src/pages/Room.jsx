@@ -187,7 +187,7 @@ const Room = () => {
             isPointing={mode === modes.point}
           />
         </div>
-        <div className="w-full text-center absolute top-0 left-0">
+        <div className="w-full text-center absolute top-3 left-0">
           <Participants
             participants={participants}
             onSelectParticipant={onSelectParticipant}
@@ -212,7 +212,7 @@ const Room = () => {
             isFollowing={!!selectedParticipant}
           />
         </div>
-        <div className="absolute bottom-2 left-2 z-10">
+        <div className="absolute bottom-3 left-3 z-10">
           <Toolbar mode={mode} onModeChanged={onModeChanged} />
         </div>
         <div className="absolute bottom-2 right-2 z-10">
