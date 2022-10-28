@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const AnnotationItem = ({ onClick, ...annotation }) => {
   const { message, user, resolved } = annotation;
 
@@ -12,7 +14,7 @@ export const AnnotationItem = ({ onClick, ...annotation }) => {
     >
       {resolved && <del>{message}</del>}
       {!resolved && message}
-      <br /> - {user.name} at {new Date(user.updatedAt).toLocaleString()}
+      <br /> - {user.name}, {moment(new Date(user.updatedAt)).fromNow()}
     </div>
   );
 };
