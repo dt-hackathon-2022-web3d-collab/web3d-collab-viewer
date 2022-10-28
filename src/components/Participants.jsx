@@ -13,7 +13,8 @@ const Participants = ({
 
   return participants.map((participant, index) => {
     const colourIndex = index % colourClassArray.length;
-    const avatarIndex = index % avatarArray.length;
+    const avatarIndex =
+      Number.parseInt(participant.id.substring(0, 5), 32) % avatarArray.length;
     const colour = colourClassArray[colourIndex];
     const thumbImage = avatarArray[avatarIndex];
     const isSelected = selectedParticipant?.id === participant.id;

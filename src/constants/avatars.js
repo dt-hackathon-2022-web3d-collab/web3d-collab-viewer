@@ -8,6 +8,13 @@ import thumb7 from "../assets/avatars/7.webp";
 import thumb8 from "../assets/avatars/8.jpg";
 import thumb9 from "../assets/avatars/9.jpg";
 import thumb10 from "../assets/avatars/10.png";
+import thumb11 from "../assets/avatars/11.webp";
+import thumb12 from "../assets/avatars/12.jpg";
+import thumb13 from "../assets/avatars/13.png";
+import thumb14 from "../assets/avatars/14.jpg";
+import thumb15 from "../assets/avatars/15.png";
+import thumb16 from "../assets/avatars/16.jpg";
+import thumb17 from "../assets/avatars/17.png";
 
 export const avatarArray = [
   thumb1,
@@ -20,4 +27,11 @@ export const avatarArray = [
   thumb8,
   thumb9,
   thumb10,
+  thumb11,
+  thumb12,
+  thumb13,
+  thumb14,
+  thumb15,
+  thumb16,
+  thumb17,
 ];
